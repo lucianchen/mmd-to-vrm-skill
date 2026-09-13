@@ -11,6 +11,6 @@
 
 两张图分别是对比网页中的全身与面部截图。相机和照明条件相同，材质差异保留；原始 MMD 辅助骨/手腕姿态可能与 VRM 不完全相同。MMD 一侧是浏览器材质预览，不代表原生 MMD + MME 效果。它们用于展示本次转换结果，不能代替全部动作、表情或物理验收。
 
-The owner explicitly requested these images in both READMEs of this private repository. Source and converted model files, textures and machine paths are not included. The source model's restrictions, including noncommercial use and no model redistribution, remain applicable; these screenshots do not grant rights to the underlying model. Full original terms remain with the local model deliverable.
+The owner explicitly requested these images in both READMEs and subsequently requested that the repository be public. Source and converted model files, textures and machine paths are not included. The source model's restrictions, including noncommercial use and no model redistribution, remain applicable; these screenshots do not grant rights to the underlying model. Full original terms remain with the local model deliverable.
 
-Owner 明确要求将对比图加入私有仓库的中英文 README。这里仅包含展示截图，没有源模型、转换后的模型文件、贴图或本机路径。原模型的非商用、禁止模型二次配布等条款不因截图而改变；完整原始条款保留在本地模型交付目录中。
+Owner 明确要求将对比图加入中英文 README，随后要求仓库公开。这里仅包含展示截图，没有源模型、转换后的模型文件、贴图或本机路径。原模型的非商用、禁止模型二次配布等条款不因截图而改变；完整原始条款保留在本地模型交付目录中。

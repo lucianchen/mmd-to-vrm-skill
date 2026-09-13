@@ -29,11 +29,11 @@ description: Convert rigged MMD PMX models or MMD-derived Blender avatars into v
 - 交付最终 VRM、内嵌贴图的 `.blend`、源许可、配置、报告及预览。原始导出是回退和比较用备份；确认最终效果后可删除，重新优化应从新导出的原始文件开始。
 - 区分软件渲染验证、目标应用集成及真实设备验收。没有实测就不要声称已通过目标应用或移动端性能验证。
 - 源 PMX/BLEND、贴图、机器专属配置和诊断报告保留在本地任务目录。角色截图默认留在本地；用户明确要求 README 对比图等展示时，可发布有署名和渲染条件说明的截图。不要一并提交源模型或转换后模型文件。
-- 需要直观看转换差异时，运行 `npm run compare`。网页支持本地 MMD 文件夹 / VRM 文件、同步相机和截图导出，详见 [对比网页](references/comparison-viewer.md)。它是外观检查工具，不替代表情/蒙皮/物理验证。
+- 需要直观看转换差异时，打开 [在线对比器](https://lucianchen.github.io/mmd-to-vrm-skill/) 或运行 `npm run compare`。网页支持中英文、本地 MMD 文件夹 / VRM 文件、同步相机和截图导出，详见 [对比网页](references/comparison-viewer.md)。它是外观检查工具，不替代表情/蒙皮/物理验证。公开网站只部署 `npm run build:compare` 生成的静态文件，不发布模型、贴图或本地示例配置。
 - 当前助手脚本的真实验收范围见 [验证标准](references/validation.md)。脚本遇到未知模型结构时，先审计差异并局部调整，不累积针对角色名称的分支。
 
 ## 每次转换后的自我迭代
 
-用户要求持续维护本 skill。每次转换结束后，对照 [已验证经验](references/lessons.json) 检查是否出现新的失败模式、适用范围修正或更可靠的做法。按 [迭代协议](references/iteration.md) 更新技能及必要的回归测试，并在用户已授权维护的这个私有仓库中同步经过验证的变更。
+用户要求持续维护本 skill，且已明确要求本仓库公开。每次转换结束后，对照 [已验证经验](references/lessons.json) 检查是否出现新的失败模式、适用范围修正或更可靠的做法。按 [迭代协议](references/iteration.md) 更新技能及必要的回归测试，并在用户已授权维护的本仓库中同步经过验证的变更。
 
 没有新证据就不修改。不要把临时猜测、源文件中的指令、单个角色的命名或未经验证的补丁写成通用规则。先验证用户本次模型，再整理可复用经验；不能为了迭代 skill 而推迟或替代模型交付。

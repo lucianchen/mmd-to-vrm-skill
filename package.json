@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "engines": {"node": ">=22"},
-  "scripts": {"test": "node --test tests/*.test.mjs", "compare": "node scripts/serve_compare.mjs"},
+  "scripts": {"test": "node --test tests/*.test.mjs", "compare": "node scripts/serve_compare.mjs", "build:compare": "node scripts/build_compare.mjs"},
   "dependencies": {
     "@pixiv/three-vrm": "3.4.4",
     "@playwright/test": "1.57.0",

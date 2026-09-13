@@ -2,6 +2,8 @@
 
 [English](README.md) · [Skill 入口](SKILL.md) · [已验证经验库](references/lessons.json)
 
+**[打开在线对比渲染室](https://lucianchen.github.io/mmd-to-vrm-skill/?lang=zh)** · 中文 / English · 模型在本机处理。
+
 将已有骨骼的 MMD 角色转换为 **VRM 1.0**，交付可编辑工程、优化后的模型和可复核的验证记录。每次先审计实际模型，再配置骨骼、表情、材质与物理；仅凭骨骼名称不能保证动作正常。
 
 仓库包含可参数化的 PMX 转换器、保留作者修改的 Blender 工程处理流程、VRM 优化器、本地对比渲染网页，以及持续积累经验的维护机制。源模型、贴图和本机专用配置保留在任务目录中；下方展示图是 Owner 明确要求加入 README 的对比渲染。
@@ -20,13 +22,17 @@
 
 模型：露西 / Lucy。模型提供：**鸣潮 / Wuthering Waves**；模型改造：**homura59**。图片来自真实模型渲染；MMD 侧采用 Three.js MMD Toon，不能等同于原生 MMD + MME，VRM 侧采用 three-vrm MToon/PBR。[渲染条件与署名](assets/comparison/README.md)。
 
-## 本地对比渲染网页
+## 对比渲染网页：在线或本地
+
+可以直接打开[免费在线版](https://lucianchen.github.io/mmd-to-vrm-skill/?lang=zh)，无需安装；也可以先运行 `npm ci --ignore-scripts`，再本地启动：
 
 ```sh
 npm run compare
 ```
 
 打开 **http://127.0.0.1:8766**，选择含贴图的完整 MMD 文件夹，再选择贴图内嵌的 VRM 文件。如果文件夹包含多个 PMX，可在左侧视窗下方切换版本。文件在本机处理。
+
+右上角 **中文 / EN** 可切换操作文案、加载状态、错误提示、几何统计和导出图片说明，切换不会重载模型或移动相机。网页记住语言选择；`?lang=en` / `?lang=zh` 可指定链接语言。首次访问时，中文浏览器使用中文，其余语言默认英文。
 
 支持同步旋转、缩放和平移，也能关闭同步独立观察；提供全身、面部、背面视角，共同亮度控制、自动旋转和 PNG 对比图导出。窄屏下两个视窗上下排列。也可通过启动参数直接载入本地示例：
 
@@ -38,7 +44,7 @@ npm run compare -- --mmd /assets/avatar/model.pmx --vrm /work/avatar/Avatar.vrm
 
 ## 安装与使用
 
-将私有仓库克隆到 Codex 技能目录中的 `mmd-to-vrm`。需要相应 GitHub 访问权限。Windows 默认目录示例：
+将公开仓库克隆到 Codex 技能目录中的 `mmd-to-vrm`。Windows 默认目录示例：
 
 ```powershell
 git clone https://github.com/lucianchen/mmd-to-vrm-skill.git "$env:USERPROFILE/.codex/skills/mmd-to-vrm"
@@ -48,7 +54,7 @@ npx playwright install chromium
 npm test
 ```
 
-目录已经存在时，先核对 Git 状态和远端，保留未提交修改。保留 Git 工作副本，便于后续将验证过的改进同步到私有仓库。
+目录已经存在时，先核对 Git 状态和远端，保留未提交修改。保留 Git 工作副本，便于后续将验证过的改进同步到仓库。
 
 在 Codex 中使用 `$mmd-to-vrm` 并提供模型路径，例如：
 
@@ -98,13 +104,19 @@ npm test
 
 每条经验包含 `id`、`status: "verified"`、`date`、`scope`、`observation`、`resolution`、`evidence`、`regression`、`limitations`。记录器检查结构和常见本机路径，但证据真实性及完整 diff 仍由助手复核；格式通过不代表结论已经成立。
 
-Owner 已要求持续维护本私有仓库。相关验证通过后，助手只提交可复用改动，向已核对的私有 origin 推送，并比较本地和远端提交哈希。此流程在每次转换任务中执行，没有后台定时器。没有新经验就不强行改动。完整要求见[迭代协议](references/iteration.md)。
+Owner 已要求持续维护本公开仓库。相关验证通过后，助手只提交可复用改动，向已核对的 origin 推送，并比较本地和远端提交哈希。此流程在每次转换任务中执行，没有后台定时器。没有新经验就不强行改动。完整要求见[迭代协议](references/iteration.md)。
+
+## 免费托管与自动发布
+
+在线版使用 **GitHub Pages**。每次推送到 `main`，[Pages 工作流](.github/workflows/pages.yml)会运行测试、构建并部署。工作流只在公开仓库运行，采用标准 `ubuntu-latest` runner。GitHub 官方提供[公开仓库的免费 Pages](https://docs.github.com/en/pages/getting-started-with-github-pages/what-is-github-pages)，以及[公开仓库的免费标准 Actions runner](https://docs.github.com/en/billing/concepts/product-billing/github-actions)。
+
+`npm run build:compare` 生成 `dist/`，只包含 HTML、CSS、带依赖版权说明的 JavaScript 和空示例配置。无需后端或上传接口；在线版通过浏览器 File API 读取你选择的模型。模型文件、贴图、本地示例配置和 README 渲染图均不进入网站发布包。该目录也可用于其他静态托管。[构建与部署细节](references/comparison-viewer.md#static-hosting)。
 
 ## 已有验证与目录
 
 首次参数化 PMX 流水线已在一个本地模型上完成全流程：**54,313 个三角形、176 个自定义形态、53 个人形骨骼、141 个弹簧关节**。原始导出 **35,655,224 字节**，优化后 **15,629,324 字节**；浏览器检查没有报告 JavaScript 错误或非有限几何数据。源模型和生成模型文件不包含在仓库中。
 
-15 项合成 Node 测试覆盖材质拆分、稀疏形态与正负零、表情/第一人称重映射、节点形态权重、贴图字节保持、不支持输入的拒绝、物理过程中的瞬时错误、着色器错误、经验记录和修订，以及对比网页的资源路径解析。测试只使用程序生成的几何体。每个真实模型仍须单独验证和看图。
+19 项 Node 自动测试覆盖材质拆分、稀疏形态与正负零、表情/第一人称重映射、节点形态权重、贴图字节保持、不支持输入的拒绝、物理过程中的瞬时错误、着色器错误、经验记录和修订、对比网页的资源路径解析、翻译完整性及静态发布范围。模型测试只使用程序生成的几何体。每个真实模型仍须单独验证和看图。
 
 | 路径 | 用途 |
 | --- | --- |

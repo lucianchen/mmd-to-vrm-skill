@@ -1,19 +1,41 @@
 <!doctype html>
 <html lang="zh-CN">
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>MMD / VRM — 对比渲染室</title><link rel="stylesheet" href="/style.css"></head>
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>MMD / VRM — 对比渲染室</title>
+  <link rel="icon" href="data:,"><link rel="stylesheet" href="./style.css">
+</head>
 <body>
-  <header class="masthead"><a class="wordmark" href="/" aria-label="对比渲染室首页"><span class="mark">[↗]</span><span>FORM <i>/</i> FORMAT</span></a><span class="edition">MMD → VRM <span>LOCAL VIEWER</span></span></header>
+  <header class="masthead">
+    <a class="wordmark" href="./" data-i18n-aria="home" aria-label="对比渲染室首页"><span class="mark">[↗]</span><span>FORM <i>/</i> FORMAT</span></a>
+    <div class="header-right"><span class="edition">MMD → VRM <span>LOCAL VIEWER</span></span><div class="language-switch" data-i18n-aria="language" role="group" aria-label="界面语言"><button data-lang="zh" lang="zh-CN">中文</button><button data-lang="en" lang="en">EN</button></div></div>
+  </header>
   <main>
-    <section class="intro"><div><p class="eyebrow">CONVERSION, IN VIEW</p><h1>转换之间，一眼看见<span>。</span></h1><p class="lede">同一束光、同一个视角，检查从 MMD 到 VRM 的每处变化。</p></div><div class="file-actions"><label class="file-button" for="mmd-input">＋ 选择 MMD 文件夹</label><input id="mmd-input" type="file" webkitdirectory multiple hidden><label class="file-button strong" for="vrm-input">＋ 选择 VRM 文件</label><input id="vrm-input" type="file" accept=".vrm" hidden><p>文件在本机处理 · 无上传</p></div></section>
-    <section class="workbench" aria-label="模型对比工作台">
-      <div class="toolbar"><div class="views" aria-label="相机视角"><button data-view="full" class="active" aria-pressed="true">全身</button><button data-view="face" aria-pressed="false">面部</button><button data-view="back" aria-pressed="false">背面</button></div><label class="toggle"><input id="sync" type="checkbox" checked>同步视角</label><label class="toggle"><input id="rotate" type="checkbox">自动旋转</label><label class="exposure" for="exposure">亮度 <input id="exposure" type="range" min="0.4" max="1.6" value="0.95" step="0.05"><output id="exposure-value">0.95</output></label><button class="export" id="export">导出对比图 ↗</button></div>
-      <div id="comparison" class="comparison">
-        <section class="pane" id="mmd-pane"><div class="pane-title"><div><span class="dot source"></span><b>MMD</b><span class="format">SOURCE / PMX</span></div><span class="file-name" id="mmd-name">等待源模型</span></div><div class="viewport" id="mmd-view"><div class="empty" id="mmd-empty"><span class="empty-glyph">01</span><h2>放入源模型</h2><p>选择含 PMX 与贴图的完整文件夹</p></div><span class="viewport-tag">MMD Toon</span></div><div class="pane-footer"><span id="mmd-stats">PMX + 本地贴图</span><label id="model-choice" hidden>模型 <select id="pmx-select" aria-label="选择 PMX 版本"></select></label><span>原始材质</span></div></section>
-        <section class="pane" id="vrm-pane"><div class="pane-title"><div><span class="dot target"></span><b>VRM</b><span class="format">CONVERTED / VRM</span></div><span class="file-name" id="vrm-name">等待转换模型</span></div><div class="viewport" id="vrm-view"><div class="empty" id="vrm-empty"><span class="empty-glyph">02</span><h2>放入转换结果</h2><p>选择贴图已内嵌的 VRM 文件</p></div><span class="viewport-tag">MToon / PBR</span></div><div class="pane-footer"><span id="vrm-stats">VRM 1.0 / 0.x</span><span>转换后材质</span></div></section>
-      </div>
-      <div class="workbench-footer"><span class="gesture">拖动旋转 <i>·</i> 滚轮缩放 <i>·</i> 右键平移</span><span id="status" role="status" aria-live="polite">选择模型，或通过启动参数载入本地示例。</span></div>
+    <section class="intro">
+      <div><p class="eyebrow">CONVERSION, IN VIEW</p><h1 data-i18n="headline">转换之间，一眼看见。</h1><p class="lede" data-i18n="lede">同一束光、同一个视角，检查从 MMD 到 VRM 的每处变化。</p></div>
+      <div class="file-actions"><button class="file-button" id="choose-mmd" data-i18n="chooseMmd">＋ 选择 MMD 文件夹</button><input id="mmd-input" type="file" webkitdirectory multiple hidden><button class="file-button strong" id="choose-vrm" data-i18n="chooseVrm">＋ 选择 VRM 文件</button><input id="vrm-input" type="file" accept=".vrm" hidden><p data-i18n="localOnly">文件在本机处理 · 无上传</p></div>
     </section>
-    <footer class="notes"><p>两个模型按身高归一化；尽可能对齐 T 姿态。材质差异保留，物理暂停。</p><p>MMD 使用 Three.js MMD Toon 预览，不等同于原生 MMD + MME。<a href="https://github.com/lucianchen/mmd-to-vrm-skill" target="_blank" rel="noreferrer">查看转换 Skill ↗</a></p></footer>
+    <section class="workbench" data-i18n-aria="workbench" aria-label="模型对比工作台">
+      <div class="toolbar">
+        <div class="views" data-i18n-aria="cameraViews" aria-label="相机视角"><button data-view="full" data-i18n="full" class="active" aria-pressed="true">全身</button><button data-view="face" data-i18n="face" aria-pressed="false">面部</button><button data-view="back" data-i18n="back" aria-pressed="false">背面</button></div>
+        <label class="toggle"><input id="sync" type="checkbox" checked><span data-i18n="sync">同步视角</span></label><label class="toggle"><input id="rotate" type="checkbox"><span data-i18n="rotate">自动旋转</span></label>
+        <label class="exposure" for="exposure"><span data-i18n="brightness">亮度</span><input id="exposure" type="range" min="0.4" max="1.6" value="0.95" step="0.05"><output id="exposure-value">0.95</output></label><button class="export" id="export" data-i18n="export">导出对比图 ↗</button>
+      </div>
+      <div id="comparison" class="comparison">
+        <section class="pane" id="mmd-pane">
+          <div class="pane-title"><div><span class="dot source"></span><b>MMD</b><span class="format">SOURCE / PMX</span></div><span class="file-name" id="mmd-name">等待源模型</span></div>
+          <div class="viewport" id="mmd-view"><div class="empty" id="mmd-empty"><span class="empty-glyph">01</span><h2 data-i18n="dropMmd">放入源模型</h2><p data-i18n="mmdHint">选择含 PMX 与贴图的完整文件夹</p></div><span class="viewport-tag">MMD Toon</span></div>
+          <div class="pane-footer"><span id="mmd-stats">PMX + 本地贴图</span><label id="model-choice" hidden><span data-i18n="model">模型</span> <select id="pmx-select" data-i18n-aria="selectPmx" aria-label="选择 PMX 版本"></select></label><span data-i18n="sourceMaterial">原始材质</span></div>
+        </section>
+        <section class="pane" id="vrm-pane">
+          <div class="pane-title"><div><span class="dot target"></span><b>VRM</b><span class="format">CONVERTED / VRM</span></div><span class="file-name" id="vrm-name">等待转换模型</span></div>
+          <div class="viewport" id="vrm-view"><div class="empty" id="vrm-empty"><span class="empty-glyph">02</span><h2 data-i18n="dropVrm">放入转换结果</h2><p data-i18n="vrmHint">选择贴图已内嵌的 VRM 文件</p></div><span class="viewport-tag">MToon / PBR</span></div>
+          <div class="pane-footer"><span id="vrm-stats">VRM 1.0 / 0.x</span><span data-i18n="targetMaterial">转换后材质</span></div>
+        </section>
+      </div>
+      <div class="workbench-footer"><span class="gesture" data-i18n="gestures">拖动旋转 · 滚轮缩放 · 右键平移</span><span id="status" role="status" aria-live="polite">选择 MMD 文件夹和 VRM 文件开始对比。</span></div>
+    </section>
+    <footer class="notes"><p data-i18n="normalization">两个模型按身高归一化；尽可能对齐 T 姿态。材质差异保留，物理暂停。</p><p><span data-i18n="rendererNote">MMD 使用 Three.js MMD Toon 预览，不等同于原生 MMD + MME。</span><a data-i18n="viewSkill" href="https://github.com/lucianchen/mmd-to-vrm-skill" target="_blank" rel="noreferrer">查看转换 Skill ↗</a></p></footer>
   </main>
-  <script type="module" src="/app.js"></script>
+  <script type="module" src="./app.js"></script>
 </body></html>

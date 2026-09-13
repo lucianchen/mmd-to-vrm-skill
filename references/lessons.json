@@ -153,5 +153,35 @@
     ],
     "regression": "node --test tests/comparison.test.mjs; real browser folder-input replay with PMX variant selection.",
     "limitations": "Textures outside the selected folder must be included by choosing a suitable parent folder; do not silently fetch them from arbitrary locations."
+  },
+  {
+    "id": "translate-viewer-state-without-reloading",
+    "status": "verified",
+    "date": "2026-09-13",
+    "scope": "Bilingual MMD/VRM comparison viewer with already loaded GPU resources",
+    "observation": "Translating static controls alone leaves dynamic loading, error, geometry and PNG captions in the previous language; rebuilding the viewer would also discard model and camera state.",
+    "resolution": "Store status and pose translation keys with parameters, refresh displayed text in place, and translate export captions at export time. Preserve the original technical diagnostics and model filenames.",
+    "evidence": [
+      "Browser replay switched Chinese and English after loading both real models; root UUIDs and camera positions/targets remained identical.",
+      "Loading summaries, triangle statistics, error messages, canvas accessibility labels and actual PNG captions used the selected language.",
+      "URL override, saved selection and English default checks passed; English screenshots at desktop and 390-pixel width were inspected."
+    ],
+    "regression": "node --test tests/viewer-publish.test.mjs; actual two-model browser replay with language switches and bilingual PNG downloads",
+    "limitations": "Model filenames and low-level dependency diagnostics retain their original text; mobile viewport checks do not establish real-device performance."
+  },
+  {
+    "id": "publish-viewer-without-local-model-examples",
+    "status": "verified",
+    "date": "2026-09-13",
+    "scope": "Static comparison viewer deployed under a project URL subdirectory",
+    "observation": "The local comparison server can expose explicitly selected example models; copying its runtime configuration into a public site would publish model locations or assets. Root-relative asset URLs also fail under a project subdirectory.",
+    "resolution": "Build a fixed set of browser assets, write an empty example manifest, reject unexpected existing output files, and resolve page assets and configuration relative to the app module. Load selected models through local browser File/blob APIs.",
+    "evidence": [
+      "The static build contained exactly six allowed files, no machine paths in bundled JavaScript, and null MMD/VRM examples; an injected model file caused the next build to fail explicitly.",
+      "A browser loaded the static site from a project subdirectory, then rendered real PMX and embedded-texture VRM files with 54313 triangles per side.",
+      "The browser network record contained only GET requests for the page, stylesheet, bundled script and empty manifest, with no model requests or uploads; no page or console errors occurred."
+    ],
+    "regression": "node --test tests/viewer-publish.test.mjs; static subdirectory browser replay and network/console inspection",
+    "limitations": "A local static replay does not prove an external deployment succeeded; verify the actual published URL after deployment."
   }
 ]
