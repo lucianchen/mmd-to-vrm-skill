@@ -1,0 +1,129 @@
+[
+  {
+    "id": "inspect-weighted-leg-chain",
+    "status": "verified",
+    "date": "2026-09-13",
+    "scope": "PMX avatars containing both ordinary and D leg chains",
+    "observation": "The audited model weighted D leg bones while the ordinary leg chain carried no vertex weight. Its upper body also had only two spine segments.",
+    "resolution": "Map the weighted D chain and the existing spine segments; do not invent an upperChest mapping or transfer weights unnecessarily.",
+    "evidence": [
+      "PMX inspector and conversion reports agree on the weighted D chain.",
+      "Final VRM has 53 human bones; the leg pose changed 38 sampled vertices with finite bounds."
+    ],
+    "regression": "Local PMX audit plus three-vrm leg-pose screenshot and deformation samples",
+    "limitations": "Mixed-weight rigs require separate rest-transform and weight-transfer review."
+  },
+  {
+    "id": "bake-group-morph-closure",
+    "status": "verified",
+    "date": "2026-09-13",
+    "scope": "PMX vertex morphs and groups referencing supported morphs",
+    "observation": "The source had 162 vertex morphs and 14 group morphs; standard blinking depended on the groups.",
+    "resolution": "Recursively bake group deltas into vertex shapes, reject cycles and unsupported morph types, and retain every source custom expression.",
+    "evidence": [
+      "Final structural audit found 176 custom morphs and zero empty morphs.",
+      "All 13 standard expression probes activated geometry; mouth and blink screenshots were inspected."
+    ],
+    "regression": "Local 162-vertex/14-group source replay with final morph inventory and face screenshots",
+    "limitations": "Material, UV and bone morphs need explicit adaptation; count preservation alone does not prove every expression looks correct."
+  },
+  {
+    "id": "clear-preset-binds-before-mapping",
+    "status": "verified",
+    "date": "2026-09-13",
+    "scope": "VRM Add-on preset expression configuration",
+    "observation": "Configured presets can retain existing bind entries when a script appends another mapping.",
+    "resolution": "Clear each configured preset bind collection before writing the intended source shapes and weights.",
+    "evidence": [
+      "Conversion uses clear before adding configured preset binds.",
+      "All 13 configured expression snapshots passed active-morph and maximum-weight checks at weight one."
+    ],
+    "regression": "Replay the expression sweep and inspect mouth/eyelid screenshots",
+    "limitations": "This does not automatically define suitable semantic expression mappings for a new model."
+  },
+  {
+    "id": "sphere-addition-is-not-surface-alpha",
+    "status": "verified",
+    "date": "2026-09-13",
+    "scope": "PMX sphere mode 2 mapped to MToon matcap",
+    "observation": "Two source materials used additive sphere maps; that mode is separate from the diffuse surface transparency.",
+    "resolution": "Approximate additive sphere lighting with MToon matcap while deriving surface alpha from actual diffuse/texture alpha or explicit overrides.",
+    "evidence": [
+      "The local conversion report records two matcap approximations.",
+      "Front, back, mouth and blink renders were inspected without whole-material transparency artifacts."
+    ],
+    "regression": "Local MToon conversion replay and front/back visual inspection",
+    "limitations": "Sphere lighting remains an approximation; multiply/subtexture sphere modes require a separate adaptation."
+  },
+  {
+    "id": "sparse-material-morph-remapping",
+    "status": "verified",
+    "date": "2026-09-13",
+    "scope": "Single-source-mesh embedded-texture VRM without morph-weight animations",
+    "observation": "Facial targets allocated many zero-only layers on body and clothing primitives.",
+    "resolution": "Split material parts, retain nonzero morphs, rebind expressions and first-person annotations, and compare decoded accessor values and image bytes.",
+    "evidence": [
+      "Synthetic optimizer regression covers signed zero, node weights and both binding maps.",
+      "Local export decreased from 35655224 to 15629324 bytes; 263 retained accessors and nine images passed equality checks.",
+      "The optimized artifact passed actual three-vrm rendering and physics checks."
+    ],
+    "regression": "node --test tests/optimizer.test.mjs; local final-artifact browser replay",
+    "limitations": "Supported structure only; numerical equality here compares VRM exports, not original MMD physics or shading."
+  },
+  {
+    "id": "validate-real-avatar-geometry",
+    "status": "verified",
+    "date": "2026-09-13",
+    "scope": "VRM export and post-save object selection",
+    "observation": "A successful exporter return or GLB load is insufficient evidence that avatar mesh data exists.",
+    "resolution": "Enumerate the clean export scene, assert real mesh/material data and expected triangles, then validate finite geometry and actual vertex deformation.",
+    "evidence": [
+      "Synthetic optimizer test rejects a skeleton-only container.",
+      "Final local audit verified 54313 triangles, eight materials and positive skinned mesh counts."
+    ],
+    "regression": "node --test tests/optimizer.test.mjs tests/runtime.test.mjs; local final audit",
+    "limitations": "Finite bounds and some moving samples still require visual review of hands, feet, clothing and expressions."
+  },
+  {
+    "id": "retain-transient-physics-failures",
+    "status": "verified",
+    "date": "2026-09-13",
+    "scope": "Runtime report aggregation across a multi-frame simulation",
+    "observation": "An object spread of the final snapshot could overwrite the accumulated nonfinite counter from earlier physics frames.",
+    "resolution": "Merge transient and final counters explicitly; fail on either instead of inspecting only the final frame.",
+    "evidence": [
+      "Synthetic test preserves two transient failures when the last snapshot is finite.",
+      "The corrected verifier completed the local 600-frame run with a total of zero nonfinite states."
+    ],
+    "regression": "node --test tests/runtime.test.mjs; corrected local 600-frame replay",
+    "limitations": "This catches numeric failures; it does not detect every collision or aesthetic defect."
+  },
+  {
+    "id": "fail-on-shader-console-errors",
+    "status": "verified",
+    "date": "2026-09-13",
+    "scope": "Chromium three-vrm runtime acceptance",
+    "observation": "The viewer collected console errors, but the original acceptance check only rejected a subset of console messages.",
+    "resolution": "Treat console errors and shader/context failures as failed verification and require all standard expression and pose evidence.",
+    "evidence": [
+      "Synthetic tests reject shader errors, missing expressions, null bounds and nondeforming poses.",
+      "The corrected local replay completed with empty browser error and console arrays."
+    ],
+    "regression": "node --test tests/runtime.test.mjs; corrected local browser replay",
+    "limitations": "Warnings are preserved for inspection; not every warning is automatically fatal."
+  },
+  {
+    "id": "verified-lesson-recording",
+    "status": "verified",
+    "date": "2026-09-13",
+    "scope": "Per-conversion maintenance of this skill",
+    "observation": "Repeated observations should not create duplicate entries, and a changed observation should not silently overwrite a previous conclusion.",
+    "resolution": "Record stable verified IDs with evidence and limitations, make identical replays a no-op, and require explicit replacement for corrections.",
+    "evidence": [
+      "Recorder tests cover no-op duplicates, explicit revisions and retention of extra context.",
+      "Tests reject missing evidence and common private absolute paths while permitting source URLs."
+    ],
+    "regression": "node --test tests/lessons.test.mjs",
+    "limitations": "Schema and path checks are assistance only; the agent must review truth, scope and the full publish diff."
+  }
+]

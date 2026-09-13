@@ -1,0 +1,89 @@
+# MMD 转 VRM Skill
+
+[English](README.md) · [Skill 入口](SKILL.md) · [已验证经验库](references/lessons.json)
+
+将已有骨骼的 MMD 角色转换为 **VRM 1.0**，交付可编辑工程、优化后的模型和可复核的验证记录。每次先审计实际模型，再配置骨骼、表情、材质与物理；仅凭骨骼名称不能保证动作正常。
+
+仓库包含可参数化的 PMX 转换器、保留作者修改的 Blender 工程处理流程、VRM 优化器、本地 three-vrm 验证器，以及持续积累经验的维护机制。模型、贴图、角色截图和本机专用配置保留在任务目录中。
+
+## 安装与使用
+
+将私有仓库克隆到 Codex 技能目录中的 `mmd-to-vrm`。需要相应 GitHub 访问权限。Windows 默认目录示例：
+
+```powershell
+git clone https://github.com/lucianchen/mmd-to-vrm-skill.git "$env:USERPROFILE/.codex/skills/mmd-to-vrm"
+Set-Location "$env:USERPROFILE/.codex/skills/mmd-to-vrm"
+npm ci --ignore-scripts
+npx playwright install chromium
+npm test
+```
+
+目录已经存在时，先核对 Git 状态和远端，保留未提交修改。保留 Git 工作副本，便于后续将验证过的改进同步到私有仓库。
+
+在 Codex 中使用 `$mmd-to-vrm` 并提供模型路径，例如：
+
+> 用 $mmd-to-vrm 把这个 PMX 转成 VRM，检查口型、眨眼、手脚蒙皮和物理，并把本次验证过的新经验迭代到 skill。
+
+## 环境与适用范围
+
+| 组件 | 实测版本 |
+| --- | --- |
+| Blender | 5.2.1 LTS，Windows Store 启动器 |
+| MMD Tools | 4.5.14 |
+| VRM Add-on for Blender | 4.7.1 |
+| Node.js | 24.12.0；package 声明支持 Node 22+ |
+| three / three-vrm | 0.169.0 / 3.4.4 |
+| Playwright / esbuild | 1.57.0 / 0.25.12 |
+
+以上为本次 Windows 实测组合，其他平台尚未验证。Blender 插件需单独准备，仓库不内置插件，也不修改全局 Blender 设置。转换 Python 脚本在 Blender 内执行。
+
+- **PMX 自动辅助脚本**：支持单骨架、单蒙皮网格，以及顶点形态和递归组合形态。遇到不支持的结构明确停止，先审计再局部适配。
+- **已有 Blender 工程**：根据[工程保留流程](references/blend-workflow.md)处理，保留作者调整的服装、PBR 材质和内嵌贴图。PMX 脚本不能直接覆盖所有 Blender 工程。
+- **映射配置**：依据实际顶点权重、辅助骨约束、形态类型和许可，为每个模型填写独立配置。
+- **转换边界**：MMD 刚体行为和部分 sphere 材质需要近似；保留原工程用于进一步调整。导出为兼容常见查看器使用每个顶点权重最大的四个关节影响。
+
+完整配置与命令见[运行说明](references/operation.md)，表情与物理细节见[专项说明](references/expressions-physics.md)。
+
+## 工作流程与交付物
+
+1. 审计源 PMX / Blender 工程，记录哈希、作者和使用条款。
+2. 根据真实骨骼、权重、材质和形态填写仓库外的 JSON 配置。
+3. 导出内嵌贴图的可编辑 `.blend` 和 `Avatar-export-original.vrm`。
+4. 优化为独立的 `Avatar.vrm`，逐项核对保留的访问器数值和贴图字节。
+5. 使用 Chromium 和 three-vrm 实际加载最终文件，检查 13 个标准表情、手臂/腿部动作和 600 帧物理，再人工查看截图。
+6. 生成最终审计报告，用 SHA-256 确认优化和运行报告对应交付的这个文件。
+
+日常使用 **`Avatar.vrm`**。较大的 **`Avatar-export-original.vrm`** 是优化前的对照与回退备份，不是运行模型时还要加载的一份文件。最终效果确认后，可在保留可编辑工程和最终文件的前提下删除；再次优化要从原始导出开始，不能重复处理已经拆分过的优化版本。
+
+优化器只接受文档中明确支持的单网格、内嵌贴图 VRM 结构。数值和贴图一致性验证覆盖这一步优化，不能证明全部 MMD 功能都等价转换。浏览器运行验证也不代表已完成目标应用接入或手机性能验收。详见[验证边界](references/validation.md)。
+
+## 每次转换后自我迭代
+
+转换完成后，助手对照[经验库](references/lessons.json)检查新问题。新证据可以用于修正文档、改进通用脚本、补充针对性回归测试，并记录适用范围明确的经验。同一经验重复记录不会产生修改；修正已有经验必须明确使用替换操作。
+
+```sh
+node scripts/record_lesson.mjs --entry /work/verified-lesson.json
+npm test
+```
+
+每条经验包含 `id`、`status: "verified"`、`date`、`scope`、`observation`、`resolution`、`evidence`、`regression`、`limitations`。记录器检查结构和常见本机路径，但证据真实性及完整 diff 仍由助手复核；格式通过不代表结论已经成立。
+
+Owner 已要求持续维护本私有仓库。相关验证通过后，助手只提交可复用改动，向已核对的私有 origin 推送，并比较本地和远端提交哈希。此流程在每次转换任务中执行，没有后台定时器。没有新经验就不强行改动。完整要求见[迭代协议](references/iteration.md)。
+
+## 已有验证与目录
+
+首次参数化 PMX 流水线已在一个本地模型上完成全流程：**54,313 个三角形、176 个自定义形态、53 个人形骨骼、141 个弹簧关节**。原始导出 **35,655,224 字节**，优化后 **15,629,324 字节**；浏览器检查没有报告 JavaScript 错误或非有限几何数据。源模型和生成角色资产不包含在仓库中。
+
+10 项合成 Node 测试覆盖材质拆分、稀疏形态与正负零、表情/第一人称重映射、节点形态权重、贴图字节保持、不支持输入的拒绝、物理过程中的瞬时错误、着色器错误，以及经验记录和修订。测试只使用程序生成的几何体。每个真实模型仍须单独验证和看图。
+
+| 路径 | 用途 |
+| --- | --- |
+| `SKILL.md`、`agents/openai.yaml` | Codex 技能入口与发现信息 |
+| `scripts/inspect_model.py`、`scripts/convert_pmx.py` | Blender 审计与配置驱动的 PMX 转换 |
+| `scripts/optimize_vrm.mjs` | 保留数值和贴图的稀疏形态优化 |
+| `scripts/viewer.js`、`scripts/verify_vrm.mjs` | 本地渲染、动作、表情与物理验证 |
+| `scripts/audit_vrm.mjs` | 与交付文件哈希绑定的最终审计 |
+| `scripts/record_lesson.mjs` | 有证据的经验记录、去重与明确替换 |
+| `references/`、`tests/` | 详细流程、经验库和合成回归测试 |
+
+转换许可与模型分发许可需要分别核对。每次读取来源条款，保留署名和限制；维护 skill 时不要把源模型或生成角色资产一并上传。

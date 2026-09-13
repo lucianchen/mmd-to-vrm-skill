@@ -1,0 +1,6 @@
+interface:
+  display_name: "MMD to VRM"
+  short_description: "Convert rigged MMD avatars into verified VRM 1.0 files"
+  default_prompt: "Use $mmd-to-vrm to convert this local rigged MMD or Blender avatar into a verified VRM 1.0 file."
+policy:
+  allow_implicit_invocation: true
