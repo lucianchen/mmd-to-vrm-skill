@@ -17,6 +17,6 @@ Browser verification aliases one Three.js instance to avoid mixed constructors. 
 
 ## Experience underlying this skill
 
-The workflow was developed across four local character conversions, including Japanese-prefix rigs, Blender-suffix rigs, mixed ordinary/D-leg weights, a PBR clothing redesign, and PMX group expressions. The parameterized PMX conversion and browser helpers were exercised on a real model with 162 vertex morphs plus 14 group morphs, eight materials and 54,313 triangles. Copyrighted model files, textures, screenshots and per-model machine paths are intentionally not included in this repository.
+The workflow was developed across four local character conversions, including Japanese-prefix rigs, Blender-suffix rigs, mixed ordinary/D-leg weights, a PBR clothing redesign, and PMX group expressions. The parameterized PMX conversion and browser helpers were exercised on a real model with 162 vertex morphs plus 14 group morphs, eight materials and 54,313 triangles. Source model files, textures and per-model machine paths are intentionally excluded. The owner-requested README comparison renders have separate attribution and rendering notes under `assets/comparison/`.
 
 Synthetic optimizer tests cover primitive/binding remapping, node weights, signed zero, image payload preservation and rejection of unsupported inputs. They supplement the real local run; they do not prove universal compatibility.

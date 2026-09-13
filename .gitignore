@@ -28,3 +28,5 @@ __pycache__/
 *-report.json
 audit.json
 FINAL-VALIDATION.json
+!assets/comparison/lucy-full.png
+!assets/comparison/lucy-face.png

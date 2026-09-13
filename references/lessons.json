@@ -125,5 +125,33 @@
     ],
     "regression": "node --test tests/lessons.test.mjs",
     "limitations": "Schema and path checks are assistance only; the agent must review truth, scope and the full publish diff."
+  },
+  {
+    "id": "preserve-loader-generated-vrm-blobs",
+    "status": "verified",
+    "date": "2026-09-13",
+    "scope": "Local comparison viewer with a restricted LoadingManager URL resolver",
+    "observation": "An initial resolver accepted the selected VRM URL but rejected blob URLs created internally by GLTFLoader for embedded images, causing missing textures and MToon colorSpace errors.",
+    "resolution": "Allow same-origin blob URLs and inline data resources before resolving selected external file paths; continue rejecting unselected external resources.",
+    "evidence": [
+      "Both startup-argument and browser-file-input loads of the final VRM completed with all embedded images.",
+      "The corrected comparison page had no page or console errors during camera, exposure, export and mobile checks."
+    ],
+    "regression": "Actual embedded-texture VRM replay through both example and file-input routes; inspect the console and rendered result.",
+    "limitations": "This validates the pinned GLTFLoader/three-vrm combination, not arbitrary external-resource VRM files."
+  },
+  {
+    "id": "resolve-mmd-textures-by-relative-path",
+    "status": "verified",
+    "date": "2026-09-13",
+    "scope": "Browser directory selection for PMX models with local textures",
+    "observation": "Selecting a folder provides webkitRelativePath values while PMX textures can use backslashes or encoded paths; basename lookup would be ambiguous when subfolders reuse image names.",
+    "resolution": "Normalize separators and encoded paths, resolve the complete relative path, permit only unique case-insensitive fallback, and fail explicitly on missing or ambiguous textures.",
+    "evidence": [
+      "Synthetic tests cover Chinese paths, encoded spaces, Windows separators, duplicate basenames, ambiguous case and traversal rejection.",
+      "A real selected MMD folder with two PMX variants loaded correctly, and the intended normal variant could be selected."
+    ],
+    "regression": "node --test tests/comparison.test.mjs; real browser folder-input replay with PMX variant selection.",
+    "limitations": "Textures outside the selected folder must be included by choosing a suitable parent folder; do not silently fetch them from arbitrary locations."
   }
 ]

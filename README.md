@@ -4,7 +4,37 @@
 
 A Codex skill for converting rigged MMD avatars into **VRM 1.0**, with reproducible export, optimization, and browser validation. Every conversion starts with a model audit; bone names alone are not enough to choose a working rig.
 
-The skill includes a parameterized PMX converter, guidance for preserving artist-modified Blender projects, a conservative VRM optimizer, a local three-vrm viewer, and an evidence-based maintenance workflow. Character models, textures, screenshots, and machine-specific profiles are kept outside this repository.
+The skill includes a parameterized PMX converter, guidance for preserving artist-modified Blender projects, a conservative VRM optimizer, a local comparison viewer, and an evidence-based maintenance workflow. Source models, textures and machine-specific profiles stay outside this repository; the comparison renders below were specifically requested for the README.
+
+## MMD / VRM visual comparison
+
+The actual source PMX is on the **left**; the delivered VRM is on the **right**. Both are rendered in the same browser with shared lighting and camera settings, height normalization, approximately aligned T poses, and physics paused. Shading differences are visible rather than corrected away.
+
+**Full body**
+
+![Lucy source MMD on the left and converted VRM on the right, full-body comparison](assets/comparison/lucy-full.png)
+
+**Face and material detail**
+
+![Lucy source MMD and converted VRM, close-up comparison of face, hair and material shading](assets/comparison/lucy-face.png)
+
+Model: Lucy / 露西. Provided by **Wuthering Waves / 鸣潮**; modified by **homura59**. These are actual model renders. The MMD side uses Three.js MMD Toon, not native MMD + MME; the VRM side uses three-vrm MToon/PBR. [Render conditions and attribution](assets/comparison/README.md).
+
+## Local comparison webpage
+
+```sh
+npm run compare
+```
+
+Open **http://127.0.0.1:8766**, choose the complete MMD folder (including textures), then choose an embedded-texture VRM file. If the folder contains multiple PMX files, select the intended version beneath the MMD viewport. Files remain on your computer.
+
+The page supports synchronized orbit, zoom and pan; independent cameras; full-body, face and back views; shared brightness; automatic rotation; and PNG comparison export. It stacks the viewports on narrow screens. Optional startup arguments can load a local example directly:
+
+```sh
+npm run compare -- --mmd /assets/avatar/model.pmx --vrm /work/avatar/Avatar.vrm
+```
+
+The server binds to loopback only and serves the selected model resources; it does not publish or upload model files. Use `--port 8767` if the default port is occupied, and Ctrl+C to stop. This is a static appearance viewer, not a conversion button or a native MMD physics emulator. [Viewer details](references/comparison-viewer.md).
 
 ## Install
 
@@ -72,9 +102,9 @@ The owner has requested ongoing maintenance of this private repository. After re
 
 ## Verification and repository contents
 
-The initial parameterized PMX pipeline was exercised end to end on a local model with **54,313 triangles, 176 custom morphs, 53 human bones and 141 spring joints**. The optimized output was **15,629,324 bytes**, down from **35,655,224 bytes**; browser checks completed without reported JavaScript errors or nonfinite geometry. Source and generated character assets are intentionally absent here.
+The initial parameterized PMX pipeline was exercised end to end on a local model with **54,313 triangles, 176 custom morphs, 53 human bones and 141 spring joints**. The optimized output was **15,629,324 bytes**, down from **35,655,224 bytes**; browser checks completed without reported JavaScript errors or nonfinite geometry. Source and generated model binaries are intentionally absent here.
 
-Ten synthetic Node tests cover material splitting, sparse morphs and signed zero, expression/first-person remapping, node weights, unchanged image payloads, unsupported input rejection, transient physics failures, shader errors, and lesson recording/revision. They use generated geometry only. Real-model checks and manual screenshot review remain necessary for each conversion.
+Fifteen synthetic Node tests cover material splitting, sparse morphs and signed zero, expression/first-person remapping, node weights, unchanged image payloads, unsupported input rejection, transient physics failures, shader errors, lesson recording/revision, and comparison-viewer asset paths. They use generated geometry only. Real-model checks and manual screenshot review remain necessary for each conversion.
 
 | Path | Purpose |
 | --- | --- |
@@ -84,6 +114,8 @@ Ten synthetic Node tests cover material splitting, sparse morphs and signed zero
 | `scripts/viewer.js`, `scripts/verify_vrm.mjs` | Local rendering, pose/expression/physics checks |
 | `scripts/audit_vrm.mjs` | Hash-bound final structural/runtime audit |
 | `scripts/record_lesson.mjs` | Verified lesson registration with duplicate protection |
+| `compare/`, `scripts/serve_compare.mjs` | Local interactive MMD/VRM comparison webpage |
+| `assets/comparison/` | Requested README renders and attribution |
 | `references/`, `tests/` | Detailed guidance, lessons and synthetic regressions |
 
-Model conversion and model redistribution are separate permissions. Read each source's terms, preserve attribution and restrictions, and do not upload source or generated character assets as part of skill maintenance.
+Model conversion and model redistribution are separate permissions. Read each source's terms and preserve attribution and restrictions. Keep source and generated model binaries and textures out of skill maintenance commits; publish comparison screenshots only when explicitly requested and with appropriate attribution.
