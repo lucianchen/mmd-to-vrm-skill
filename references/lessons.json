@@ -183,5 +183,94 @@
     ],
     "regression": "node --test tests/viewer-publish.test.mjs; static subdirectory browser replay and network/console inspection",
     "limitations": "A local static replay does not prove an external deployment succeeded; verify the actual published URL after deployment."
+  },
+  {
+    "id": "ignore-inactive-sphere-mode-flags",
+    "scope": "PMX materials with a nonzero sphere mode and texture index -1",
+    "observation": "A valid PMX retained sphere mode 2 without a sphere texture reference; the generic helper incorrectly rejected it as an unsupported active material.",
+    "resolution": "Record inactive mode flags and continue. Reject unsupported sphere modes only when a texture index is actually referenced.",
+    "evidence": [
+      "The real source retained 42524 triangles and 50 custom morphs after conversion.",
+      "The final avatar passed all thirteen standard expressions, deformation probes and 600 finite simulation frames; front/back and face screenshots were inspected.",
+      "The updated shared converter was replayed successfully on the same source, including humanoid hierarchy preflight."
+    ],
+    "regression": "Local source replay through scripts/convert_pmx.py and final-artifact browser/structure checks; npm test",
+    "limitations": "Active multiply and subtexture sphere modes still require deliberate adaptation; a missing active image remains an error.",
+    "status": "verified",
+    "date": "2026-09-13"
+  },
+  {
+    "id": "retain-morph-type-index-and-material-binds",
+    "scope": "Audited PMX vertex, bone and diffuse material morph adaptations",
+    "observation": "A source reused vertex morph names for bone morphs. Other controls changed material opacity rather than geometry; four material controls were empty source separators.",
+    "resolution": "Preserve type/index identity and reverse name mappings. Bake supported bone effects from a controlled evaluated pose, map supported material operations to color binds with alpha-capable materials, and record empty controls, unsupported channels and clamps.",
+    "evidence": [
+      "One source preserved 30 vertex, two baked bone and one material controls after disambiguating repeated names.",
+      "Another source preserved 61 vertex, 27 baked bone and 15 material controls, including four documented empty separators.",
+      "Material expression names and bind counts were audited separately; visible neutral/blink/mouth frames and additional control snapshots were captured."
+    ],
+    "regression": "Local source morph inventory, materialColorBind count audit, runtime standard and additional expression probes",
+    "limitations": "Bone deltas are rest-pose approximations. Unsupported shader/UV effects are not recreated; numeric activity does not prove every custom expression is artistically equivalent.",
+    "status": "verified",
+    "date": "2026-09-13"
+  },
+  {
+    "id": "validate-humanoid-hierarchy-before-export",
+    "scope": "PMX rigs whose human-bone names exist but ancestry is incompatible with VRM",
+    "observation": "Legs descended from the mapped spine through zero-weight cancellation helpers, and shoulders descended from the neck. T-pose and export returned CANCELLED despite populated mappings.",
+    "resolution": "Inspect ancestry and weights; reparent audited helpers without changing rest positions, map the appropriate weighted hips bone, refresh VRM Add-on candidates, and report explicit humanoid errors before export.",
+    "evidence": [
+      "VRM Add-on reported 43 hierarchy errors before repair and zero after the tested hip/leg-helper/shoulder repairs.",
+      "The repaired component retained all 111347 triangles and passed arm/leg deformation and 600 finite simulation steps."
+    ],
+    "regression": "Local VRM Add-on error_messages before/after repair plus successful shared-converter preflight replay",
+    "limitations": "This is not permission to reparent every similarly named rig; constraints, weighted transforms and actual ancestry still require inspection.",
+    "status": "verified",
+    "date": "2026-09-13"
+  },
+  {
+    "id": "respect-fbx-world-transforms-and-emission",
+    "scope": "Three rigged FBX packages with separate game material JSON",
+    "observation": "Y-up local bone coordinates were already rotated to Z-up by the importer object transform. A second rotation made the avatar sideways, while inherited white emission washed out diffuse textures. Numeric verification still passed.",
+    "resolution": "Update the dependency graph and inspect world coordinates, preserve consistent transforms for rig and meshes, rebuild material channels from the supplied metadata, and explicitly reset unwanted emission.",
+    "evidence": [
+      "All three corrected final avatars were inspected in front/back and neutral/blink/mouth renders.",
+      "Source triangle counts 30639, 54692 and 54161 and mesh layouts 7, 7 and 12 were retained.",
+      "Each corrected avatar passed thirteen standard expression checks, skinning deformation and 600 finite simulation steps."
+    ],
+    "regression": "Actual FBX import/export replay, exported material inspection and final three-vrm renders",
+    "limitations": "Game-specific lightmaps, eye/shadow shaders and packed masks are only partly represented; no secondary physics was inferred from absent configuration.",
+    "status": "verified",
+    "date": "2026-09-13"
+  },
+  {
+    "id": "verify-derived-normal-pixels-after-export",
+    "scope": "PBR restoration from an audited outfit material package",
+    "observation": "A shader-node green-channel inversion appeared in Blender but the exported normal image remained unchanged. DITHERED surface mode alone also exported BLEND for a source masked material.",
+    "resolution": "Bake channel conversion into a separate derived texture, connect exporter-supported image/Normal Map nodes, and check decoded embedded image values. Express the alpha threshold explicitly and verify exported MASK.",
+    "evidence": [
+      "Before baking, exported normal pixels equaled the source and the intended green inversion had maximum error 255.",
+      "After baking, decoded embedded green inversion error was zero and red/blue channel error was zero for the inspected normal image.",
+      "Exported normal and metallic-roughness textures were present, both intended cutout materials used MASK, and final PBR front/back renders were inspected."
+    ],
+    "regression": "Decoded source-versus-embedded pixel comparison, glTF material inspection and local PBR runtime replay",
+    "limitations": "Channel-byte checks do not establish the original engine normal convention, custom lighting, detail layers or subsurface appearance; convention assumptions and unsupported channels remain documented.",
+    "status": "verified",
+    "date": "2026-09-13"
+  },
+  {
+    "id": "separate-outfit-capabilities-from-avatar-validation",
+    "scope": "Batch conversion of complete avatars, headless outfit components and multi-mesh assets",
+    "observation": "A headless outfit had a complete humanoid bone map and zero expressions. Other numerically passing exports were sideways, over-emissive or cropped by a fixed-height QA camera.",
+    "resolution": "Inspect actual source geometry and final screenshots; label component capabilities explicitly. Keep strict expression defaults for normal avatars, document any scoped local exception, preserve unsupported multi-mesh optimizer inputs unchanged, and frame current model bounds.",
+    "evidence": [
+      "The batch delivered nine complete avatars with thirteen checked standard expressions and one explicitly labeled headless component with no invented expressions.",
+      "All ten retained source triangles, unchanged source hashes, and separate runtime/structure and visual-review records.",
+      "Multiple-mesh/no-expression outputs used byte-identical passthrough with an explicit unoptimized report."
+    ],
+    "regression": "Per-artifact capability inventory, final checksum audit, runtime checks and actual front/back/available face inspection",
+    "limitations": "Software rendering and finite simulation are not target-app/device acceptance, full cloth collision equivalence or a newly granted model license.",
+    "status": "verified",
+    "date": "2026-09-13"
   }
 ]

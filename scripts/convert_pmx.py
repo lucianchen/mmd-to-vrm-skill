@@ -118,6 +118,10 @@ def convert(profile_path):
             arm.data.edit_bones[child].parent = arm.data.edit_bones[parent]
         bpy.ops.object.mode_set(mode='OBJECT')
         report['helper_reparenting'] = config.get('helper_reparenting', {})
+        from vrm.editor.vrm1.property_group import Vrm1HumanBonesPropertyGroup
+        Vrm1HumanBonesPropertyGroup.update_all_bone_name_candidates(bpy.context, arm.data.name, force=True)
+        hierarchy_errors = list(ext.vrm1.humanoid.human_bones.error_messages())
+        assert not hierarchy_errors, 'Invalid humanoid hierarchy: ' + '; '.join(hierarchy_errors)
         checkpoint('expressions')
         basis = np.empty(len(mesh.data.vertices)*3, dtype=np.float32)
         keys[0].data.foreach_get('co',basis)
@@ -206,8 +210,10 @@ def convert(profile_path):
                 mt.matcap_texture.index.source = bpy.data.images.load(pm.textures[src.sphere_texture].path,check_existing=True)
                 mt.matcap_factor = tuple(overrides.get('matcap_factor',[.35,.35,.35]))
                 report['warnings'].append(src.name + ': additive sphere approximated as MToon matcap')
-            elif src.sphere_texture_mode:
+            elif src.sphere_texture_mode and src.sphere_texture >= 0:
                 raise ValueError('Adapt unsupported sphere mode explicitly: ' + src.name)
+            elif src.sphere_texture_mode:
+                report.setdefault('inactive_sphere_flags', []).append({'material':src.name, 'mode':src.sphere_texture_mode, 'texture_index':src.sphere_texture})
             report['materials'].append({'name':src.name,'texture':img.name if img else None,'alpha':gltf.alpha_mode})
         checkpoint('physics')
         physics = config['physics']

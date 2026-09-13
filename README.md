@@ -75,6 +75,7 @@ The tested configuration is Windows; other platforms have not been verified. Ins
 
 - **PMX:** the supplied converter supports one armature, one skinned mesh, vertex morphs and recursively composed group morphs. Other structures stop with an explicit error and need an audited local adaptation.
 - **Blender projects:** inspect the actual saved project and follow the [preservation workflow](references/blend-workflow.md). The PMX helper is not a universal Blender material/rig converter.
+- **Rigged FBX packages:** an [audited adaptation workflow](references/fbx-workflow.md) covers imported world transforms, material metadata, multiple meshes and missing secondary physics. Three local packages were verified with separate adapters; FBX is not an input mode of the supplied PMX converter.
 - **Rig and expression mapping:** model-specific settings remain necessary. The skill examines actual weights, helper constraints, morph types and license text before preparing a profile.
 - **Physics and shading:** MMD rigid-body behavior and some sphere materials are approximations in VRM. The editable source is retained. Export uses the four largest joint influences per vertex for viewer compatibility.
 
