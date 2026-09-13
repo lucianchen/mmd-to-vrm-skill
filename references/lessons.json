@@ -272,5 +272,20 @@
     "limitations": "Software rendering and finite simulation are not target-app/device acceptance, full cloth collision equivalence or a newly granted model license.",
     "status": "verified",
     "date": "2026-09-13"
+  },
+  {
+    "id": "remove-accessory-faces-with-shape-and-weight-invariants",
+    "status": "verified",
+    "date": "2026-09-13",
+    "scope": "An editable converted avatar with accessories isolated by audited material face sets",
+    "observation": "A requested no-accessory variant needed permanent geometry removal while the original file and the character's existing shape keys, weights and expressions remained usable.",
+    "resolution": "Use the source accessory-hiding material control to confirm the affected material scope, remove only its face sets in a separate Blender copy, track surviving vertex identities, compare every retained shape coordinate and vertex weight, and remove the now-obsolete accessory-only expression. Record the intended triangle reduction instead of weakening full-source triangle checks.",
+    "evidence": [
+      "The local variant removed 4460 of 46966 triangles; the final file contained 42506 triangles and no primitives assigned to either accessory material.",
+      "All retained shape-key coordinates and weights matched the source using preserved vertex identities. Thirty-two custom expressions, 54 human bones and 18 spring chains remained.",
+      "The optimized 8152316-byte final passed thirteen standard expression probes, skinning deformation and 600 finite simulation frames. Front/back, blink and mouth renders were inspected, and original Blender/VRM hashes remained unchanged."
+    ],
+    "regression": "Local material-scope audit, surviving-vertex shape/weight comparison, explicit removed-triangle audit and final three-vrm render replay",
+    "limitations": "Material names alone are not proof of an isolated accessory; shared materials or shared topology require finer selection. Unused rig bones were retained to preserve hierarchy. This local adaptation is not a new automatic mode of the published converter."
   }
 ]

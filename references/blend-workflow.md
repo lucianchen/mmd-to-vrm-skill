@@ -21,3 +21,9 @@ Work in a copy/independent Blender process. Unparent avatar objects while preser
 After saving the working .blend, inspect `context.selected_objects`; object-level selected flags do not prove that the export operator will receive the mesh. Exporting an explicit clean object set avoids source context filtering. Inspect actual GLB mesh/material/triangle counts before proceeding to optimization.
 
 The bundled PMX converter is not a generic .blend rewrite tool. Adapt a local script using these decisions. The optimizer also expects one source skinned mesh: support multi-mesh exports explicitly or retain the valid unoptimized file rather than forcing a destructive join.
+
+## Accessory-free variants
+
+When an accessory has an existing material-hiding expression, inspect its material targets to help establish the geometry scope. Confirm that those face sets contain only the requested accessory; names or opacity alone are insufficient. Work in a separate copy, preserve surviving vertex identities during deletion, and compare every retained shape-key coordinate and vertex weight against the original. Remove an obsolete accessory-only expression explicitly and record any retained unused bones.
+
+The final triangle count should equal the source count minus the deliberately removed triangles. Keep this variant-specific assertion separate from the normal converter's unchanged-source count check. Verify that no remaining primitive uses the removed material sets, keep standard/custom expression and spring inventories, and inspect actual front/back and face renders. Preserve the original avatar and publish only reusable guidance or code, not the edited model.
