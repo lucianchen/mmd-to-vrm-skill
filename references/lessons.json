@@ -347,5 +347,20 @@
     ],
     "regression": "Per-file GLB/hash/preset/accessor audit, controlled three-vrm VRM 0/1 capture, actual standing/face screenshot review and render-counter inspection",
     "limitations": "Embedded presets do not represent application-side remapping. Scene counters and software rendering do not establish mobile FPS, target-application acceptance or a universal visual-quality ranking."
+  },
+  {
+    "id": "separate-broken-texture-paths-from-missing-images",
+    "status": "verified",
+    "date": "2026-09-13",
+    "scope": "An incomplete PMX package with garbled atlas filenames, two absent active ribbon maps and a UTF-16 credit sheet",
+    "observation": "The initial audit stopped on five missing active texture references. Three corresponding face, hair and accessory atlases existed under corrupted filenames, while two ribbon maps were absent. The credit sheet was readable only after BOM-based UTF-16 decoding.",
+    "resolution": "Preserve the original package and create a derived staging copy. Visually confirm atlas matches, remap only those references without altering image bytes, and keep separate original/derived hashes. For the two absent maps, explicitly retain the affected geometry and original diffuse RGBA without a texture, with the lost pattern and texture alpha documented. Keep the generic converter's missing-active-texture failure intact.",
+    "evidence": [
+      "The staged import resolved three atlas paths; final face, hair, accessory and front/back UV appearance was inspected. All original package file hashes remained unchanged.",
+      "Two missing maps affected 2304 triangles, which remained in the final 107098-triangle avatar with the original half-transparent black material fallback.",
+      "The final 19.77 MB VRM retained 68 vertex morphs and 8 material controls, passed thirteen standard expression checks and 600 finite simulation frames, and was delivered with visible missing-texture and source-license notes."
+    ],
+    "regression": "Local original/derived manifest comparison, staged import, final structural and runtime audit, front/back/face/material screenshot inspection and gallery link/hash validation",
+    "limitations": "Visual atlas matching is a case-specific recovery, not an automatic encoding repair. Missing pattern and texture alpha were not reconstructed. MMD cloth and material controls remain approximations; successful conversion does not grant commercial or redistribution rights."
   }
 ]

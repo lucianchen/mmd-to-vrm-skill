@@ -36,6 +36,14 @@ Use the audited actual names for `hips`, `spine`, `chest`, optional `upper_chest
 
 The PMX converter deliberately refuses duplicate morph names, multiple avatar meshes/rigs, unsupported morph types and unsupported sphere modes instead of silently dropping data. Use a local adapted conversion script for those cases and document the resulting limitations.
 
+## Broken texture paths in source packages
+
+Distinguish a missing image from a broken reference before adapting an incomplete package. Inspect the PMX texture table, actual package paths and atlas content. Similar filenames alone do not establish a match. For a supported recovery, copy the source package to an isolated staging directory, remap only the confirmed references, preserve image bytes, and inspect the final face, hair and accessory UV appearance. Keep original and derived PMX hashes plus the explicit mapping; do not rename the user's source files in place.
+
+If an active image is truly absent, keep the normal converter's error. A local adaptation may retain the affected geometry and original diffuse RGBA without that texture when this is a useful partial conversion within the request. Record the material indices, missing paths, triangle count and unrecovered pattern/texture alpha, and disclose the fallback in the gallery and delivery. This is not a successful texture recovery. Do not substitute an unrelated atlas or silently drop faces to pass validation.
+
+Audit source text encoding separately from filename corruption. A UTF-16 credit sheet can remain readable even when its filename is garbled; decode from its BOM and preserve the full text. When a derived PMX is used, final validation should check that derived input and also rehash every original package file. Optimization texture-byte checks cover the exported VRM optimization step, not the entire source-to-VRM conversion.
+
 ## Commands
 
 ```sh
