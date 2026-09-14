@@ -17,6 +17,16 @@ Browser verification aliases one Three.js instance to avoid mixed constructors. 
 
 An outfit can contain all required human bones while having no head geometry or expression morphs. Compare the actual source geometry with package preview images and label it as a component. The bundled verifier's thirteen-expression default remains strict. A local capability-specific adaptation may omit expression checks only with an explicit audited reason recorded in the report; do not add empty fake expressions or call that a fully functional avatar. Validate material-only expressions through their material bindings and visible effect, separately from geometry movement.
 
+## Comparing an existing avatar with a conversion
+
+Keep each baseline file immutable and distinguish a library asset from application-specific enhanced variants. Compare hashes, embedded preset bindings and rendered effects; extra named morph targets do not guarantee that standard VRM presets actually bind them. A local pair of existing assets contained empty left/right blink presets, including the variant with added wink targets. Preserve that diagnostic failure. Application-level remapping is a separate capability and must not be inferred from standalone file behavior.
+
+Sparse vertex samples can miss a localized expression. A zero sampled displacement is not proof that a bound shape is empty: inspect the referenced morph accessors and rendered vertices, or verify the actual face image. Also distinguish an empty bind list, all-zero target geometry and a present but visually subtle expression.
+
+For a VRM 0/VRM 1 comparison adapter, normalize the forward direction and verify the pose basis as well as the camera. Rotating the VRM 0 scene alone left the same arm rotation raising its arms while the VRM 1 arms lowered; the local adapter corrected the VRM 0 rotation signs and visually rechecked standing poses. Do not use a mis-posed or cropped baseline to judge the model. The bundled conversion verifier targets VRM 1 and does not advertise this comparison adapter as a generic mode.
+
+Use identical lighting, exposure and resolution, with height-normalized body and head-relative face framing. Report download size separately from model triangles, materials and actual render calls. In a local comparison, an 11.08 MB conversion had 30,922 model triangles but 56 scene draw calls and 59,265 rendered triangles including outlines; an 80.36 MB baseline had 59,413 model triangles and 5 draw calls. This demonstrates why file size and raw triangle count alone cannot establish runtime performance. These are scene counters, not a hardware benchmark.
+
 ## Experience underlying this skill
 
 The workflow was developed across four local character conversions, including Japanese-prefix rigs, Blender-suffix rigs, mixed ordinary/D-leg weights, a PBR clothing redesign, and PMX group expressions. The parameterized PMX conversion and browser helpers were exercised on a real model with 162 vertex morphs plus 14 group morphs, eight materials and 54,313 triangles. Source model files, textures and per-model machine paths are intentionally excluded. The owner-requested README comparison renders have separate attribution and rendering notes under `assets/comparison/`.

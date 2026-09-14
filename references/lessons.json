@@ -317,5 +317,35 @@
     "limitations": "Reparenting is not a general replacement for multi-target IK, twist distribution or nonlinear cloth constraints. Review each follower relationship before adapting other rigs.",
     "status": "verified",
     "date": "2026-09-13"
+  },
+  {
+    "id": "audit-depth-order-after-opacity-morph-promotion",
+    "status": "verified",
+    "date": "2026-09-13",
+    "scope": "Audited opaque PMX accessories promoted to MToon BLEND to retain material-opacity controls",
+    "observation": "At neutral alpha 1, the converted accessory and earrings appeared dark and lost visible texture because their transparent backface/outline rendering did not write depth.",
+    "resolution": "Run a same-model depth-write and outline A/B before changing source textures. In the local adapter, explicitly enable MToon transparentWithZWrite for the audited originally opaque materials, then re-export and inspect neutral and off states. Keep the original export and record residual visibility.",
+    "evidence": [
+      "The depth-write A/B restored the accessory texture and yellow earrings without changing source images.",
+      "The final exported file retained 30922 triangles, 46 geometry custom expressions, 9 material controls and 13 responding standard expressions; 600 simulation frames remained finite.",
+      "The accessory-off control removed its textured body but left a faint contour; that limitation is recorded instead of claiming complete geometry removal."
+    ],
+    "regression": "Local three-vrm neutral/depth-write/opaque/no-outline A/B, final Blender re-export, standard expression and material-control screenshots, source/hash and optimizer invariants",
+    "limitations": "This is a scoped local adapter fix, not a universal BLEND default or a claim that all opacity, layering and sphere-map controls are equivalent. Test partial transparency and occlusion for each target runtime."
+  },
+  {
+    "id": "compare-effective-presets-and-render-cost-across-vrm-versions",
+    "status": "verified",
+    "date": "2026-09-13",
+    "scope": "Read-only comparison of existing VRM 0 library/lab variants against a newly converted VRM 1 avatar",
+    "observation": "The smaller file used more render calls; an enhanced baseline with extra wink morphs still had empty standard wink bindings. Rotating the VRM 0 scene did not alone normalize its arm-pose rotation basis. Sparse samples also missed some localized morph motion.",
+    "resolution": "Preserve baseline hashes, normalize orientation and poses, render with controlled conditions, inspect effective preset bindings and full referenced morph data when sparse samples are inconclusive. Separate file size, source morph counts, geometric triangles, outline overhead and scene draw calls. Keep failed capability checks distinct from completed comparison captures.",
+    "evidence": [
+      "An 11.08 MB, 30922-triangle conversion rendered with 56 calls and 59265 triangles including outlines; the 80.36 MB baseline rendered 59413 triangles in 5 calls under the same scene.",
+      "Both existing files had empty left/right blink preset bindings; only the lab variant exposed a working surprised preset. Additional wink target names did not fix the embedded presets.",
+      "The VRM 0 pose basis was corrected and standing/face images were visually inspected; both baseline hashes remained unchanged. Full accessor checks found real localized motion where sparse samples reported zero."
+    ],
+    "regression": "Per-file GLB/hash/preset/accessor audit, controlled three-vrm VRM 0/1 capture, actual standing/face screenshot review and render-counter inspection",
+    "limitations": "Embedded presets do not represent application-side remapping. Scene counters and software rendering do not establish mobile FPS, target-application acceptance or a universal visual-quality ranking."
   }
 ]
