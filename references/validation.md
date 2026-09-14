@@ -23,4 +23,6 @@ The workflow was developed across four local character conversions, including Ja
 
 Synthetic optimizer tests cover primitive/binding remapping, node weights, signed zero, image payload preservation and rejection of unsupported inputs. They supplement the real local run; they do not prove universal compatibility.
 
+The dependency-free Python morph-inventory tests run with `python -m unittest discover -s tests -p 'test_*.py'`. They check SDEF helper exclusion, ordinary imports, reserved-name collisions, unknown extras, and incomplete storage sets. Run these alongside `npm test` when changing the PMX shape inventory handling.
+
 A subsequent batch added six complete PMX exports, three multi-mesh FBX exports and one headless PMX outfit component. All retained source triangle counts and passed runtime checks within their documented capability scope. Front/back and available neutral/blink/mouth screenshots were inspected. Local adapters covered duplicate bone/vertex morph names, diffuse material-color expressions, inactive sphere flags, nonstandard humanoid hierarchy, FBX world transforms/emission and explicit PBR normal-channel baking. Those adapters are not advertised as generic published converters; the reusable procedures and limits are recorded in [lessons.json](lessons.json).

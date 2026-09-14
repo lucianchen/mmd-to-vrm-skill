@@ -119,6 +119,8 @@ The initial parameterized PMX pipeline was exercised end to end on a local model
 
 Nineteen automated Node tests cover material splitting, sparse morphs and signed zero, expression/first-person remapping, node weights, unchanged image payloads, unsupported input rejection, transient physics failures, shader errors, lesson recording/revision, comparison-viewer asset paths, translation completeness and the static publication boundary. Model tests use generated geometry only. Real-model checks and manual screenshot review remain necessary for each conversion.
 
+Five dependency-free Python tests cover SDEF storage-key classification and rejection of ambiguous imported shape keys. Run `python -m unittest discover -s tests -p 'test_*.py'`; CI runs these alongside the Node tests. SDEF helper data is excluded from exported expressions while retained in the original Blender import.
+
 | Path | Purpose |
 | --- | --- |
 | `SKILL.md`, `agents/openai.yaml` | Codex entry point and discovery metadata |

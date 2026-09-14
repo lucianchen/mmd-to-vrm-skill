@@ -14,6 +14,7 @@ from mathutils import Matrix, Vector
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from inspect_model import register_addons
+from morph_inventory import importer_storage_keys
 
 
 def convert(profile_path):
@@ -78,6 +79,12 @@ def convert(profile_path):
             for c in list(b.constraints): b.constraints.remove(c)
             b.matrix_basis = Matrix.Identity(4)
         keys = mesh.data.shape_keys.key_blocks
+        report['removed_importer_shape_keys'] = importer_storage_keys(
+            [m.name for m in pm.morphs], list(keys.keys())[1:])
+        for name in report['removed_importer_shape_keys']:
+            mesh.shape_key_remove(keys[name])
+        if report['removed_importer_shape_keys']:
+            report['warnings'].append('MMD Tools SDEF storage shape keys were excluded from VRM expressions and targets; original SDEF data remains in source.blend. VRM skinning approximates SDEF with linear blend skinning.')
         mesh.data.shape_keys.animation_data_clear()
         for key in keys: key.value = 0
         report['source_weight_totals'] = {g.name: 0.0 for g in mesh.vertex_groups}

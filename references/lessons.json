@@ -287,5 +287,35 @@
     ],
     "regression": "Local material-scope audit, surviving-vertex shape/weight comparison, explicit removed-triangle audit and final three-vrm render replay",
     "limitations": "Material names alone are not proof of an isolated accessory; shared materials or shared topology require finer selection. Unused rig bones were retained to preserve hierarchy. This local adaptation is not a new automatic mode of the published converter."
+  },
+  {
+    "id": "exclude-sdef-storage-from-authored-morphs",
+    "scope": "PMX imports containing the complete MMD Tools SDEF storage-key set",
+    "observation": "An import contained 33 authored vertex morphs plus three SDEF storage shape keys. Binding every Blender shape key exposed the storage keys as 36 public expressions with unintended body-wide deltas.",
+    "resolution": "Compare the imported names with PMX morph records before expression setup. Exclude only the complete known SDEF storage-key set from the export mesh, retain the original import, and reject authored reserved-name collisions, unknown extras and incomplete helper sets.",
+    "evidence": [
+      "The repaired shared converter replay retained 389622 triangles, all 33 authored custom expressions, 13 standard presets, 15 embedded images and 53 human bones.",
+      "The final file contained no SDEF storage targets or expressions, and passed final runtime, pose, 600-frame finite simulation and screenshot inspection.",
+      "Five dependency-free Python regression tests and all nineteen existing Node tests passed."
+    ],
+    "regression": "python -m unittest discover -s tests -p 'test_*.py'; npm test; actual PMX conversion and final three-vrm rendering",
+    "limitations": "Standard VRM linear blend skinning approximates source SDEF. Removing importer storage is not evidence of exact SDEF deformation equivalence, and unknown helper types still require investigation.",
+    "status": "verified",
+    "date": "2026-09-13"
+  },
+  {
+    "id": "preserve-weighted-ik-arm-followers",
+    "scope": "Audited weighted auxiliary arm bones that share the mapped arm rest segment but are siblings driven by MMD IK",
+    "observation": "Two weighted sleeve/upper-arm followers were attached beneath the shoulders rather than the mapped arms. Removing their IK constraints without reconnecting them would leave that geometry behind during humanoid arm motion.",
+    "resolution": "Confirm the source IK, weights, coincident rest pivots and aligned segments. In this scoped case, parent each follower beneath its mapped arm while retaining rest transforms and weights, then verify the exported hierarchy and actual posed geometry.",
+    "evidence": [
+      "The final left and right followers influenced 4752 and 5094 exported vertices respectively.",
+      "Both followers remained direct children of their mapped arms; their arm-relative matrices differed by less than 1e-5 between T-pose and idle while world transforms changed.",
+      "Front, back and raised-arm screenshots were inspected; standard expression, arm/leg deformation and 600-frame runtime checks passed."
+    ],
+    "regression": "Local source IK/rest-segment audit followed by final three-vrm follower-weight, hierarchy, relative-transform and raised-arm screenshot checks",
+    "limitations": "Reparenting is not a general replacement for multi-target IK, twist distribution or nonlinear cloth constraints. Review each follower relationship before adapting other rigs.",
+    "status": "verified",
+    "date": "2026-09-13"
   }
 ]

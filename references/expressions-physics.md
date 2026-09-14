@@ -2,6 +2,7 @@
 
 ## Expressions
 
+- MMD Tools creates `mmd_sdef_c`, `mmd_sdef_r0`, and `mmd_sdef_r1` shape keys as SDEF skinning storage. They are not authored expressions. Compare the imported inventory with PMX morph records, preserve the original import, and exclude the complete known helper set from the export mesh before binding expressions. Refuse unknown extras or authored names colliding with these reserved names instead of deleting them by prefix. Standard VRM linear blend skinning approximates the original SDEF deformation.
 - Standard vowel mapping commonly uses `aa/ih/ou/ee/oh`, but source shape names and their actual effects must be inspected. Japanese `あ/い/う/え/お` is an observed convention, not a universal schema.
 - Blink and wink names can have surprising meanings. Inspect the source group recipe and rendered eyelids; verify left/right rather than inferring from names alone.
 - Clear existing preset binds before adding new ones. Exporter-generated binds plus duplicate manual binds can double the effective morph weight.
@@ -13,6 +14,8 @@
 - For diffuse material morphs, evaluate the source multiply/add operation against the neutral material. Materials whose alpha changes need an alpha-capable render mode. Verify exported material-color binds separately from geometry morph activity; retain unsupported channels, clamps and empty separator controls in the report rather than claiming every control moves vertices.
 
 ## Physics and skinning
+
+Weighted auxiliary arm bones can be siblings of a mapped upper arm and follow it through MMD IK. Removing IK leaves their weighted geometry behind even when the humanoid hierarchy is valid. Audit the constraint and rest segment; when the follower shares the arm's rest pivot and direction, reparenting it beneath the mapped arm can preserve weights and runtime following. Verify exported hierarchy, nonzero follower weights, relative transforms across poses, and visible sleeve/arm behavior. This is a scoped approximation, not a rule to reparent every auxiliary bone or preserve all IK/twist behavior.
 
 Map bone-bound dynamic PMX bodies to skeleton-following spring chains. Keep every unique represented dynamic bone accounted for, while reporting unbound bodies and any multiple-body-to-one-bone collapse. Add terminal tips where needed and choose a stable center. Body colliders must be sized for the actual imported model.
 
