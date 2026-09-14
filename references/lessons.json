@@ -362,5 +362,50 @@
     ],
     "regression": "Local original/derived manifest comparison, staged import, final structural and runtime audit, front/back/face/material screenshot inspection and gallery link/hash validation",
     "limitations": "Visual atlas matching is a case-specific recovery, not an automatic encoding repair. Missing pattern and texture alpha were not reconstructed. MMD cloth and material controls remain approximations; successful conversion does not grant commercial or redistribution rights."
+  },
+  {
+    "id": "preserve-material-slot-identity-when-disambiguating-names",
+    "status": "verified",
+    "date": "2026-09-13",
+    "scope": "Two PMX avatars with repeated material names and index-based face ranges or material morphs",
+    "observation": "Repeated source names become unique Blender material names, conflicting with the converter's name assertion and making name-only overrides ambiguous.",
+    "resolution": "Assign unique names by source material index in a derived copy, keep a reverse map, and preserve all slot ordering and index-based references. Verify parsed source data before conversion rather than merging materials or bypassing the assertion.",
+    "evidence": [
+      "Both parsed derived PMX files had identical vertices including weights, faces, bones, morphs, rigid bodies and joints; material properties differed only in names.",
+      "Final exports retained 19 and 28 material slots; the second retained all 24 material controls with verified binding counts.",
+      "Both final files passed their explicit expression capability profiles, posed geometry and 600-frame simulation checks, followed by screenshot and delivery hash/link inspection."
+    ],
+    "regression": "Local original/derived PMX data comparison, ordered material inventory, VRM expression binding audit and actual final render replay",
+    "limitations": "This is a local preprocessing recipe, not automatic merging or proof that all same-name slots have the same texture or behavior. Keep per-model mappings outside the public skill."
+  },
+  {
+    "id": "prove-duplicate-surface-before-accepting-triangle-count-difference",
+    "status": "verified",
+    "date": "2026-09-13",
+    "scope": "A PMX containing opposite-winding copies of one face in a double-sided material",
+    "observation": "The imported mesh retained 212054 triangles, while export contained 212053 and correctly failed the strict final audit.",
+    "resolution": "Locate the exact source duplicate, compare counts by material and exported position multisets, verify both source and output are double-sided, and bind the scoped exception report to the final hash. Keep the shared triangle assertion unchanged.",
+    "evidence": [
+      "The source pair used the same three vertex indices in opposite order in material slot 4; both source and VRM material flags were double-sided.",
+      "Only that material lost one instance. Its position-multiset difference was exactly the duplicate, with maximum nearest-position error below 1e-7 meters and explicit 1e-6 meter comparison precision.",
+      "All other material triangle counts were unchanged; the final file passed thirteen expression checks, 600 simulation frames and front/back/pose screenshot review."
+    ],
+    "regression": "Local source-face identity and per-material triangle multiset comparison followed by hash-bound scoped final audit",
+    "limitations": "This does not justify tolerating arbitrary count differences or claim exact shading equivalence. The generic auditor remains strict, and distinct surfaces require repair or explicit separate handling."
+  },
+  {
+    "id": "retain-audited-face-cutouts-after-global-opacity-morphs",
+    "status": "verified",
+    "date": "2026-09-13",
+    "scope": "A PMX with layered masked facial surfaces and global material-opacity controls",
+    "observation": "Runtime numeric checks passed although promotion of OPAQUE and MASK materials to BLEND visually hid bangs, irises and the neutral mouth.",
+    "resolution": "Use a same-model neutral/depth/cutout A/B. Restore MASK on the audited originally cutout face layers and transparent depth writing on the audited formerly opaque layers, retaining material controls with a documented cutoff-versus-smooth-fade tradeoff.",
+    "evidence": [
+      "Opaque-layer depth writing restored bangs; adding the masked-layer cutout restored irises and neutral mouth without replacing images or removing the eye overlay.",
+      "The final re-export retained 50131 triangles, 15 authored vertex morphs, 9 source no-op bone controls and 24 material controls; eleven source-supported standard expressions and 600 finite simulation frames passed.",
+      "Final front/back/pose and face screenshots were inspected. A separate global fade replay reached zero opacity, visually hid the avatar, and restored exactly the original material state and neutral face."
+    ],
+    "regression": "Local neutral/depth/cutout A/B, actual Blender re-export, final three-vrm expression/pose replay and global hide/restoration check",
+    "limitations": "MASK uses a threshold instead of a smooth fade. Other clothing states and every legacy sphere/toon channel are not equivalent or visually accepted; this is not a universal transparency default."
   }
 ]

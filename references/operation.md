@@ -44,6 +44,10 @@ If an active image is truly absent, keep the normal converter's error. A local a
 
 Audit source text encoding separately from filename corruption. A UTF-16 credit sheet can remain readable even when its filename is garbled; decode from its BOM and preserve the full text. When a derived PMX is used, final validation should check that derived input and also rehash every original package file. Optimization texture-byte checks cover the exported VRM optimization step, not the entire source-to-VRM conversion.
 
+## Repeated material names
+
+PMX material identity is its ordered slot index; names may repeat. Before assigning name-based overrides, give repeated slots unique names in an isolated derived PMX and keep an index/name reverse map. Preserve material order, face ranges and material-morph indices. In two local replays, direct parsing confirmed identical vertices/weights, faces, bones, morphs, rigid bodies and joints, with material properties unchanged apart from names. Do not merge same-name materials or merely remove the converter's name assertion.
+
 ## Commands
 
 ```sh

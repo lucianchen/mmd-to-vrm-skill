@@ -17,6 +17,10 @@ Browser verification aliases one Three.js instance to avoid mixed constructors. 
 
 An outfit can contain all required human bones while having no head geometry or expression morphs. Compare the actual source geometry with package preview images and label it as a component. The bundled verifier's thirteen-expression default remains strict. A local capability-specific adaptation may omit expression checks only with an explicit audited reason recorded in the report; do not add empty fake expressions or call that a fully functional avatar. Validate material-only expressions through their material bindings and visible effect, separately from geometry movement.
 
+## Investigating a triangle-count mismatch
+
+Keep the default exact triangle check. A local export had one fewer triangle than its PMX because two source faces used the same vertices in opposite winding within an already double-sided material. Before accepting that particular difference, compare counts per material, source face identities, double-sided flags and the affected material's exported triangle-position multiset against the source, with an explicit numeric tolerance. Only one duplicate surface instance was absent; all other material counts and unique surface positions remained. Record the source/export totals, face IDs, final file hash and proof in a separate scoped audit. A small count difference alone is not evidence of harmless cleanup, and this geometric comparison does not prove shading equivalence or justify omitting a distinct surface.
+
 ## Comparing an existing avatar with a conversion
 
 Keep each baseline file immutable and distinguish a library asset from application-specific enhanced variants. Compare hashes, embedded preset bindings and rendered effects; extra named morph targets do not guarantee that standard VRM presets actually bind them. A local pair of existing assets contained empty left/right blink presets, including the variant with added wink targets. Preserve that diagnostic failure. Application-level remapping is a separate capability and must not be inferred from standalone file behavior.
