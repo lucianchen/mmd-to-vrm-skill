@@ -468,5 +468,20 @@
     ],
     "regression": "Decode and compare every retained accessor, compare image bytes and semantic references, validate bounds and expression restoration in the final runtime, and retain the original export as fallback.",
     "limitations": "The public optimizer still has its one-source-mesh contract; the local multi-mesh adapter is not a universal extension-aware garbage collector. Download size decreases without reducing texture GPU memory. Physics changes must be audited separately from storage invariants."
+  },
+  {
+    "id": "author-rest-silhouette-before-secondary-motion-tuning",
+    "status": "verified",
+    "date": "2026-09-17",
+    "scope": "A user-requested downward tail with an upward-hooked tip, plus more responsive hair on a multi-mesh VRM avatar",
+    "observation": "The previous spring revision was stable but its straight neutral tail did not match the requested J silhouette. Lowering drag aggressively caused excessive folding. Weight inspection also showed the tail root influenced an outfit mesh, so rotating every tail bone would alter clothing.",
+    "resolution": "Preserve the shared attachment root, author the curve on downstream rest bones, bake the tail mesh to the new pose while keeping UVs/weights/topology, and then tune motion around the resulting neutral shape. Inspect side-view rest and settling renders, and compare identical body/head drivers with a close-up for hair.",
+    "evidence": [
+      "The authored neutral tail descends through its middle and rises about 9.16 cm from the low point to the tip; the settled side view retains the hook.",
+      "Blender polygons, triangulation, UVs and weights remained identical. The exporter produced seven extra split vertices after normal deformation; all triangle-corner UV/color/skin identities matched, and other mesh/morph/image/material/expression data were unchanged.",
+      "Normal and gentle movement with six seconds of settling remained finite at 30/60/120 fps. Final 13 standard expressions and all 322 custom-control resets passed; eight side-motion frames and eight hair-closeup frames were visually inspected."
+    ],
+    "regression": "Replay previous/final files with identical motion and cameras, verify neutral and recovered silhouette, compare editable topology and per-corner export attributes, verify non-target mesh/rest/inverse-bind invariants, and reopen the final Blender file.",
+    "limitations": "This is an intentional art-direction edit and a scoped local replay, not a lossless shape conversion, exact Unity PhysBone transfer, universal force preset, exhaustive collision test or owner/target-device acceptance."
   }
 ]
