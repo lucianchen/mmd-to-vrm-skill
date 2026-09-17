@@ -438,5 +438,35 @@
     ],
     "regression": "Local raw-versus-sparse numerical and structural comparison followed by browser load, expression/reset and secondary-motion verification",
     "limitations": "This adapter is not the bundled optimizer and does not extend its single-mesh contract. It does not prove source-renderer equivalence, support compressed geometry, or establish mobile performance."
+  },
+  {
+    "id": "validate-spring-center-amplitude-and-settling",
+    "status": "verified",
+    "date": "2026-09-17",
+    "scope": "A six-segment tail and multi-chain hair in a locally converted UnityPackage avatar, tested with three-vrm",
+    "observation": "A previous 600-frame check showed finite nonzero local spring rotations, but the owner still observed a rod-like tail and weak hair. Hips-centered stored simulation state suppressed response to body movement; identical-motion baseline tail peaks were about 1.0 to 1.85 degrees per joint.",
+    "resolution": "Isolate the center effect with an identical-motion A/B, then tune root-to-tip tail stiffness and drag and distinguish bangs from other hair. The local revision omitted centers on hair/tail only, retained other chains, synchronized and reopened the editable project, and inspected a rendered movement/settling sequence.",
+    "evidence": [
+      "At the same 60 fps body/head test, six tail joints reached about 37.75 to 63.16 degrees of peak local rotation; median peak hair rotation increased from 3.82 to 22.38 degrees.",
+      "Normal and gentle body motion plus six seconds of settling remained finite at 30, 60 and 120 fps; final-second tail-tip speed stayed below 0.8 mm/s.",
+      "Eight rear-oblique motion frames showed segment bending and settling without obvious tail/body intersection in those views; 13 standard expressions and all 322 custom-control resets passed on the final file."
+    ],
+    "regression": "Replay identical body/head drivers against immutable baseline and final files, measure local rotations and settling, inspect animation/time samples, and reopen the synchronized Blender file.",
+    "limitations": "Per-model tuning and a specific motion profile, not universal thresholds or equivalence to Unity PhysBones. No exhaustive collision or target-device acceptance. World-space springs require reset on teleport, and passive springs do not create autonomous wagging."
+  },
+  {
+    "id": "prune-live-accessors-before-buffer-view-compaction",
+    "status": "verified",
+    "date": "2026-09-17",
+    "scope": "A local multi-mesh sparse-storage adapter for an uncompressed embedded-image VRM with an explicit audited extension set",
+    "observation": "The first sparse-storage pass still retained 531 orphan accessors because its bufferView reachability walk included every accessor, even those no primitive, skin or animation referenced.",
+    "resolution": "Enumerate actual accessor references in primitive attributes, indices and targets, skin inverse-bind matrices and animation sampler input/output. Remap live accessor indices before pruning unreachable views and repacking aligned binary data. Reject unaudited extensions; preserve referenced zero targets and their target indices.",
+    "evidence": [
+      "Removed 531 orphan accessors and 531 exclusive views; retained 604 live accessors with exactly identical decoded bytes.",
+      "All seven embedded 4K images remained byte-identical. Semantic comparison after reversing accessor-index remapping preserved meshes, nodes, skins, materials, expressions and other audited structures.",
+      "File size fell from 88.85 MB to 63.79 MB by storage compaction and 63.78 MB after separately changing physics JSON. Final runtime retained seven meshes, 69229 triangles, 13 standard expressions and 322 custom controls."
+    ],
+    "regression": "Decode and compare every retained accessor, compare image bytes and semantic references, validate bounds and expression restoration in the final runtime, and retain the original export as fallback.",
+    "limitations": "The public optimizer still has its one-source-mesh contract; the local multi-mesh adapter is not a universal extension-aware garbage collector. Download size decreases without reducing texture GPU memory. Physics changes must be audited separately from storage invariants."
   }
 ]
