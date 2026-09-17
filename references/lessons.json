@@ -483,5 +483,21 @@
     ],
     "regression": "Replay previous/final files with identical motion and cameras, verify neutral and recovered silhouette, compare editable topology and per-corner export attributes, verify non-target mesh/rest/inverse-bind invariants, and reopen the final Blender file.",
     "limitations": "This is an intentional art-direction edit and a scoped local replay, not a lossless shape conversion, exact Unity PhysBone transfer, universal force preset, exhaustive collision test or owner/target-device acceptance."
+  },
+  {
+    "id": "decode-shader-packed-atlas-channels-and-repeat-uvs",
+    "status": "verified",
+    "date": "2026-09-17",
+    "scope": "Local adaptation of a PMXExporter MToonLike shader with base, emission and normal images packed in horizontal thirds",
+    "observation": "Plain color-map conversion produced black hair strips. Source shader offsets identified three channel regions; two hair materials had U coordinates beyond the base-color third and sampled the emission region.",
+    "resolution": "Inspect shader equations and actual UV ranges. Crop each channel without resizing, restore the divided U coordinate, and bind separate repeating base/emission/normal maps using the source channel factors. Preserve source files and record that fixing cross-channel tiling intentionally changes raw PMX appearance.",
+    "evidence": [
+      "All 48 exported channel bindings matched the intended crop pixel hashes and dimensions.",
+      "258 geometry and morph attribute comparisons passed; U multiplied by three with zero measured error, and other attributes plus inverse binds remained identical.",
+      "Final runtime retained 53976 triangles, 54 human bones, 57 custom controls including one empty source control, and 25 spring chains; standard expression and pose screenshots were inspected.",
+      "Original ZIP and all 37 extracted files retained their hashes; before/after renders confirmed removal of the black hair strips."
+    ],
+    "regression": "Local shader and UV audit, exact crop-to-export RGBA comparison, accessor comparison, standard-expression/custom-reset verification, and face/pose/movement screenshot inspection",
+    "limitations": "Model-scoped adapter, not a generic atlas detector. Source shader lighting and tangent-space normal interpretation remain MToon approximations. Per-channel repeat intentionally repairs overflowing source UVs; no shader-identical rendering or target-device acceptance claim."
   }
 ]
