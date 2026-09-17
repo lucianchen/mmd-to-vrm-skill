@@ -1,6 +1,6 @@
 ---
 name: mmd-to-vrm
-description: Convert rigged MMD PMX models or MMD-derived Blender avatars into verified VRM 1.0 files. Use for MMD转VRM, bone and expression mapping, MToon/PBR preservation, SpringBone approximation, and export validation.
+description: Convert rigged MMD PMX or Blender avatars into verified VRM 1.0, and audit rigged FBX/UnityPackage avatars for a scoped conversion adapter. Use for MMD转VRM, humanoid and expression mapping, material preservation, SpringBone approximation, and export validation.
 ---
 
 # MMD → VRM
@@ -11,7 +11,7 @@ description: Convert rigged MMD PMX models or MMD-derived Blender avatars into v
 
 - **PMX**：运行 `scripts/inspect_model.py`，根据审计填写独立模型配置，使用 `scripts/convert_pmx.py`。该转换器支持单骨架、单蒙皮网格、顶点及组合形态；发现其他形态类型时明确报错，按参考文档适配。
 - **Blender 工程**：同样先审计。阅读 [Blender 工程适配](references/blend-workflow.md)，保留已有材质、内嵌贴图和模型改装；不要直接重导原 PMX 丢掉作者修改。
-- **带骨骼 FBX 包**：阅读 [FBX 与游戏材质适配](references/fbx-workflow.md)，检查导入后的世界坐标和随包材质元数据；需要独立适配器，不能直接传给 PMX 转换器。
+- **带骨骼 FBX / UnityPackage**：阅读 [FBX 与游戏材质适配](references/fbx-workflow.md)，检查世界坐标和材质元数据；UnityPackage 还需解析 GUID、Prefab 默认形态和物理配置。需要独立适配器，不能直接传给 PMX 转换器。
 - 骨骼、表情或有效贴图缺失时，说明缺失内容及可完成范围。不要把这套流程当成无骨骼模型的自动绑定工具。
 
 ## 实施要点

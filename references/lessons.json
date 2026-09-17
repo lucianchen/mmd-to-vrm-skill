@@ -407,5 +407,36 @@
     ],
     "regression": "Local neutral/depth/cutout A/B, actual Blender re-export, final three-vrm expression/pose replay and global hide/restoration check",
     "limitations": "MASK uses a threshold instead of a smooth fade. Other clothing states and every legacy sphere/toon channel are not equivalent or visually accepted; this is not a universal transparency default."
+  },
+  {
+    "id": "restore-unity-avatar-defaults-from-prefab-and-named-curves",
+    "status": "verified",
+    "date": "2026-09-17",
+    "scope": "Audited UnityPackage FBX avatars with prefab blendshape overrides and named default animation curves",
+    "observation": "The plain FBX import did not represent the selected prefab's authored clothed default. Some prefab shape-array sizes predated additional FBX shapes, while explicit index overrides still corresponded to named source controls.",
+    "resolution": "Resolve assets through GUID metadata; inspect the actual ordered shape names and cross-check indexed defaults against named curves. Rebase the selected neutral geometry, retain remaining shape travel and add inverse reset controls. Preserve source data and distinguish untransferred prefab transforms, clips, menus and shader features.",
+    "evidence": [
+      "Sixty-three named default blendshape bindings were checked against resolved source meshes and any matching indexed overrides; twenty-five active defaults were baked.",
+      "The final avatar retained seven meshes, 69229 triangles and 53 human bones. Thirteen standard expressions changed sampled geometry and were visually inspected with front/back and limb poses.",
+      "All 322 custom controls were activated and cleared in three-vrm with finite bounds and zero sampled geometry restoration error. Of these, 296 had nonzero geometry targets; no-op controls were explicitly listed.",
+      "The original archive and extracted asset/meta hashes remained unchanged. Unity menu and animation playback were not claimed as transferred."
+    ],
+    "regression": "Local isolated Blender conversion, metadata cross-check, glTF binding/accessor audit, complete custom-control reset replay and rendered face/pose review",
+    "limitations": "Renderer-ID mapping was audited for this package, not inferred from array lengths. Fixed baseline rebasing is not a universal wardrobe converter, and the original Unity shader/transform behavior was not fully reproduced."
+  },
+  {
+    "id": "validate-multi-mesh-sparse-storage-with-stable-bindings",
+    "status": "verified",
+    "date": "2026-09-17",
+    "scope": "Separate local sparse-only optimization of an uncompressed seven-mesh VRM 1 export",
+    "observation": "The single-source-mesh optimizer intentionally rejected this structural scope, but dense morph storage could be reduced without splitting or merging meshes.",
+    "resolution": "Use a scoped adapter to replace eligible morph accessor storage with sparse data while preserving target indices and zero targets. Repack only referenced buffer views and prove every accessor's numerical equivalence, image byte equality and unchanged scene/material/VRM structures before rendering the final artifact.",
+    "evidence": [
+      "Export size decreased from 111496216 to 88854796 bytes with 1135 accessors numerically equal and seven embedded images byte-identical; signed-zero normalization was counted.",
+      "Meshes, nodes, skins, materials, expressions and spring definitions were structurally unchanged, retaining 69229 triangles and 322 custom bindings.",
+      "The optimized artifact passed thirteen standard-expression renders, limb deformation checks, all custom-control restoration checks and finite secondary-motion replay."
+    ],
+    "regression": "Local raw-versus-sparse numerical and structural comparison followed by browser load, expression/reset and secondary-motion verification",
+    "limitations": "This adapter is not the bundled optimizer and does not extend its single-mesh contract. It does not prove source-renderer equivalence, support compressed geometry, or establish mobile performance."
   }
 ]

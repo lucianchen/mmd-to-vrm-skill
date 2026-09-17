@@ -1,6 +1,14 @@
 # Rigged FBX and accompanying game materials
 
-This is an audited adaptation path, not a new input mode for `convert_pmx.py`. Three local FBX packages were converted with separate adapters; the published helper remains strict about its supported PMX structure.
+This is an audited adaptation path, not a new input mode for `convert_pmx.py`. Local FBX packages and one UnityPackage avatar were converted with separate adapters; the published helper remains strict about its supported PMX structure.
+
+## UnityPackage assets and authored defaults
+
+Read the package's GUID-to-pathname table and extract assets plus `.meta` files into an isolated directory with traversal checks. Resolve material texture GUIDs and FBX external-material references; unresolved references may belong to disabled shader features, so record their enabled state instead of silently dropping them or inventing replacements. Retain the source package, complete asset inventory and hashes. A package containing license URL shortcuts does not contain the linked license text; preserve the links and distinguish unavailable terms from an actual grant.
+
+FBX alone may omit the intended Unity avatar state. Inspect the selected prefab, named animation bindings and ModelImporter humanoid map. Unity's three thumb entries map to VRM 1 metacarpal/proximal/distal, not three identically named Unity slots. In one package, some serialized blendshape array sizes predated later FBX additions. Map explicit indexed overrides only after resolving the renderer and checking the actual ordered shape names; cross-check against named default animation curves. Do not identify renderers by array length alone, guess missing indices, or use the FBX importer's initial shape values as authoritative defaults.
+
+For a fixed default outfit, a local adapter rebased the neutral geometry by the authored default deltas, retained each control's remaining travel, and added inverse reset targets for active defaults. This prevents a viewer's expression reset from discarding the outfit baseline. Record the baked values and preserve the original shapes in the source project. Default-at-maximum controls and source separator shapes may be no-ops; audit and report them separately from effective controls. Verify every custom control can be activated and cleared with exact baseline restoration, then inspect clothed neutral, face and pose renders. This does not transfer Unity animation timing, menus, controller logic or every prefab transform override.
 
 ## World coordinates and scene scope
 
@@ -20,6 +28,10 @@ For PBR packages, use explicit base-color, normal and ORM channel metadata where
 
 A single named face shape may occur on several meshes, such as face and eyebrows. Bind every relevant occurrence and retain all source custom shapes. Preserve multiple meshes when the optimizer's one-source-mesh contract does not apply. A byte-identical copy of an already valid export is an honest final artifact; record that optimization was skipped.
 
-These three FBX imports did not supply usable spring/rigid-body configuration. Humanoid deformation and face shapes were verified; hair/clothing secondary physics was not invented. Missing physics needs a deliberate later setup, not an implied successful transfer.
+The earlier three standalone FBX imports did not supply usable spring/rigid-body configuration. A later UnityPackage did include PhysBone settings in its prefab. Inspect the package before declaring physics absent: enabled state, root transforms, curves, limits, endpoints and colliders are outside plain FBX. A newly configured VRM spring approximation must be labeled separately from an equivalent transfer, and source-disabled groups should stay disabled. Missing physics needs a deliberate later setup, not an implied successful transfer.
+
+## Optional multi-mesh sparse storage
+
+The published optimizer still requires one source mesh. A separate local adapter successfully reduced a seven-mesh export by sparsifying morph accessors without splitting meshes, changing target indices or remapping bindings. If taking this route, decode and compare every accessor before/after (explicitly allowing only numerically equivalent signed zero), verify embedded image bytes, and compare the unchanged meshes, nodes, skins, materials, expressions and spring definitions. Keep zero targets when target-index identity must remain stable. The local replay retained 69,229 triangles and all 322 custom bindings; this is scoped evidence, not a claim that the bundled optimizer now accepts arbitrary multi-mesh files.
 
 Use the final avatar's actual bounds for full-body QA framing and reframe after a pose changes them. The earlier fixed-height camera cropped a tall avatar with a weapon. Geometry bounds, shader compilation and 600 finite simulation steps cannot replace front/back and neutral/blink/mouth inspection.
