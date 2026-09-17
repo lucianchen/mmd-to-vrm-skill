@@ -499,5 +499,50 @@
     ],
     "regression": "Local shader and UV audit, exact crop-to-export RGBA comparison, accessor comparison, standard-expression/custom-reset verification, and face/pose/movement screenshot inspection",
     "limitations": "Model-scoped adapter, not a generic atlas detector. Source shader lighting and tangent-space normal interpretation remain MToon approximations. Per-channel repeat intentionally repairs overflowing source UVs; no shader-identical rendering or target-device acceptance claim."
+  },
+  {
+    "id": "resolve-unity-int64-nested-prefab-and-rest-defaults",
+    "status": "verified",
+    "date": "2026-09-17",
+    "scope": "A modular UnityPackage avatar assembled from body, costume and tail FBX components with an optional hidden coat",
+    "observation": "JavaScript Number rounded signed 64-bit fileIDs. Raw FBX meshes also omitted nested prefab shape defaults, a tail scale, eye rotations and the authored hidden state of an optional coat.",
+    "resolution": "Keep fileIDs exact; obtain FBX renderer and transform IDs, ordered shapes and local transforms using an isolated minimal Unity audit project. Follow source references and nested overrides, compare shared full rest matrices, distinguish q and -q, and bake verified changes into every shape and the rest skeleton. Preserve excluded components in the source.",
+    "evidence": [
+      "Unity returned 1032 object/component records; the adapter resolved a sparse nested renderer override using the instance/source ID XOR relation and the FBX renderer table.",
+      "Three assembled rigs retained 19 meshes, 124868 triangles and 53 humanoid mappings. Tail scale and eye rotations were baked; the optional coat stayed excluded according to its explicit inactive state.",
+      "Source ZIP, UnityPackage, all extracted asset bytes and metadata hashes were unchanged. Final standard expressions, 592 custom-control resets and 30/60/120 fps spring probes passed."
+    ],
+    "regression": "Replay source-ID resolution without floating-point conversion, compare authored defaults and shared rest matrices, verify source hashes, geometry counts, standard expression views and exact custom-control restoration.",
+    "limitations": "Scoped local adapter, not a generic Modular Avatar builder. Source scripts were not executed; menu, constraint, interaction, collision and shader equivalence are not claimed. Four-weight runtime adaptation is separately measured and documented."
+  },
+  {
+    "id": "release-baked-facial-baseline-in-conflicting-presets",
+    "status": "verified",
+    "date": "2026-09-17",
+    "scope": "A humanoid avatar with an authored frown baked into its neutral face and independent source vowel shapes",
+    "observation": "Vowel shapes changed vertices and passed a nonzero-motion check, but the additive frown baseline nearly closed the ou and oh mouths in rendered output.",
+    "resolution": "Bind the existing inverse frown target together with the affected phoneme and positive/surprised presets. Keep the authored frown for neutral and do not reset unrelated baselines.",
+    "evidence": [
+      "Before/after face sheets showed open, distinguishable ou and oh after releasing the conflicting baseline.",
+      "All 13 standard expression renders were inspected; all 592 custom controls remained finite and returned to exactly the sampled baseline.",
+      "The final editable scene reopened successfully; only eight preset recipes gained the inverse-baseline binding, with source shapes retained."
+    ],
+    "regression": "Compare neutral and every affected vowel/emotion image, verify nonzero geometric motion and clearing restoration against the final artifact hash.",
+    "limitations": "Model-specific expression composition rule. A nonzero displacement test alone is insufficient, and source baseline shapes should not all be canceled indiscriminately."
+  },
+  {
+    "id": "bake-procedural-msdf-atlas-to-static-dial",
+    "status": "verified",
+    "date": "2026-09-17",
+    "scope": "A Unity procedural analog clock shader with an MSDF atlas used by an avatar accessory",
+    "observation": "Binding the atlas directly as base color displayed colored data artifacts instead of a clock face.",
+    "resolution": "Read the source sampling equations and material parameters; decode the MSDF median and coverage, then bake the analog dial at a documented static time into a transparent image for MToon.",
+    "evidence": [
+      "The adapter generated a 1024 square RGBA dial at 10:10:30 and preserved the original shader, texture atlas and material metadata.",
+      "The final accessory render no longer displayed the original colored atlas artifacts. Final VRM loads, expression checks and body poses remained valid.",
+      "Storage compression preserved every resulting embedded image byte; the bake itself is recorded as a separate material conversion."
+    ],
+    "regression": "Inspect the source texture mode, verify baked alpha coverage and fixed-time record, then inspect the accessory in the final rendered model.",
+    "limitations": "Static analog appearance only; no real-time clock or exact shader antialiasing equivalence. This is a scoped shader adaptation, not a universal MSDF or procedural-material baker."
   }
 ]
