@@ -544,5 +544,20 @@
     ],
     "regression": "Inspect the source texture mode, verify baked alpha coverage and fixed-time record, then inspect the accessory in the final rendered model.",
     "limitations": "Static analog appearance only; no real-time clock or exact shader antialiasing equivalence. This is a scoped shader adaptation, not a universal MSDF or procedural-material baker."
+  },
+  {
+    "id": "unity-modular-wardrobe-ownership-and-payloads",
+    "status": "verified",
+    "date": "2026-09-19",
+    "scope": "Static wardrobe menus on one Unity avatar with a shared resident rig",
+    "observation": "Whole-clip sampling reset rest transforms in the scoped exporter. Independently authored hair and hat menus also controlled a shared hair mesh, while complete per-look VRMs repeated the base character and textures.",
+    "resolution": "Apply static active and blendshape curves explicitly; preserve source object IDs and rest transforms; compact referenced material/image/buffer payloads with semantic checks; audit cross-category ownership and express reversible masks instead of silently dropping edits.",
+    "evidence": [
+      "Eighteen clothing looks compiled with retained mesh/morph/material/image and skin invariants checked against full exports.",
+      "All eighteen clothing choices loaded through the real application backend with finite transforms, valid resident bones, and retained avatar/expression instances.",
+      "The initial multi-slot sample verified hair, glasses and hat changes, whole-selection Wear/Cancel restoration and reversible hat masking; larger wardrobe ownership audit identified shared hat/hair and hat/ear nodes."
+    ],
+    "regression": "Replay per-item compiler invariants, actual renderer loading and expression/bone continuity, then inspect front/back renders and test each overlapping ownership recipe separately.",
+    "limitations": "One shared-rig source; diffuse MToon approximation. All-combination visual QA, rigid attachment adapters, source physics transfer, account persistence and mobile performance are separate work."
   }
 ]
